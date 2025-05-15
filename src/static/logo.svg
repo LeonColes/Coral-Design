@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="90" height="110" viewBox="55 45 90 110" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <defs>
+    <linearGradient id="coral-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7E6A"/>
+      <stop offset="100%" stop-color="#E55C48"/>
+    </linearGradient>
+    <filter id="soft-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  
+  <!-- 主干 -->
+  <path d="M100,50 L100,150" stroke="#FF7E6A" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- 分支 -->
+  <path d="M100,70 L70,50" stroke="#FF7E6A" stroke-width="7" stroke-linecap="round"/>
+  <path d="M100,90 L130,70" stroke="#FF7E6A" stroke-width="7" stroke-linecap="round"/>
+  <path d="M100,110 L60,90" stroke="#FF7E6A" stroke-width="7" stroke-linecap="round"/>
+  <path d="M100,130 L140,110" stroke="#FF7E6A" stroke-width="7" stroke-linecap="round"/>
+  
+  <!-- 珊瑚点 -->
+  <circle cx="70" cy="50" r="5" fill="#4ECDC4" filter="url(#soft-glow)"/>
+  <circle cx="130" cy="70" r="5" fill="#4ECDC4" filter="url(#soft-glow)"/>
+  <circle cx="60" cy="90" r="5" fill="#4ECDC4" filter="url(#soft-glow)"/>
+  <circle cx="140" cy="110" r="5" fill="#4ECDC4" filter="url(#soft-glow)"/>
+  <circle cx="100" cy="50" r="5" fill="#4ECDC4" filter="url(#soft-glow)"/>
+</svg>
