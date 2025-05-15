@@ -5,9 +5,8 @@
       "type": "home"
     },
     {
-      "path": "pages/hi",
-      "type": "page",
-      "layout": "home"
+      "path": "pages/button",
+      "type": "page"
     }
   ],
   "globalStyle": {
