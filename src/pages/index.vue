@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 // 导航函数
 function jumpToPage(path: string) {
@@ -8,666 +8,444 @@ function jumpToPage(path: string) {
   })
 }
 
-// 外部链接处理函数
-function openExternalLink(url: string) {
-  // 在小程序中打开网页或复制链接到剪贴板
-  // #ifdef MP
-  uni.setClipboardData({
-    data: url,
-    success: () => {
-      uni.showToast({
-        title: '链接已复制，请在浏览器中打开',
-        icon: 'none',
-      })
-    },
-  })
-  // #endif
+// 版权年份
+const currentYear = new Date().getFullYear()
 
-  // 在H5中直接打开新页面
-  // #ifdef H5
-  window.open(url)
-  // #endif
-}
+// 动画状态
+const isAnimationLoaded = ref(false)
 
-// 打开文档
-function openDocs() {
-  // 在APP中直接打开文档页面
-  uni.navigateTo({
-    url: '/pages/index',
-  })
-}
-
-// 定义组件项类型
-interface ComponentItem {
-  id: string
-  title: string
-  description: string
-  icon: string
-  disabled?: boolean
-}
-
-// 定义组件分类类型
-interface ComponentCategory {
-  id: string
-  title: string
-  description: string
-  items: ComponentItem[]
-}
-
-// 组件分类
-const componentCategories: ComponentCategory[] = [
-  {
-    id: 'design',
-    title: '设计系统',
-    description: 'Coral Design设计系统的基础元素',
-    items: [
-      {
-        id: 'color',
-        title: '色彩系统',
-        description: '查看完整的色彩体系',
-        icon: 'primary',
-      },
-      {
-        id: 'typography',
-        title: '排版系统',
-        description: '基于SF Pro的排版规范',
-        icon: 'coral-600',
-      },
-    ],
-  },
-  {
-    id: 'basic',
-    title: '基础组件',
-    description: '即将推出的基础UI组件',
-    items: [
-      {
-        id: 'component/button',
-        title: 'Button 按钮',
-        description: '用于触发操作的按钮',
-        icon: 'coral-600',
-        disabled: false,
-      },
-      {
-        id: 'icon',
-        title: 'Icon 图标',
-        description: '语义化的矢量图形',
-        icon: 'teal-500',
-        disabled: true,
-      },
-      {
-        id: 'divider',
-        title: 'Divider 分割线',
-        description: '区隔内容的分割线',
-        icon: 'gray-400',
-        disabled: true,
-      },
-    ],
-  },
-  {
-    id: 'form',
-    title: '表单组件',
-    description: '即将推出的表单相关组件',
-    items: [
-      {
-        id: 'input',
-        title: 'Input 输入框',
-        description: '基础的文本输入框',
-        icon: 'coral-600',
-        disabled: true,
-      },
-      {
-        id: 'select',
-        title: 'Select 选择器',
-        description: '下拉选择控件',
-        icon: 'teal-500',
-        disabled: true,
-      },
-      {
-        id: 'checkbox',
-        title: 'Checkbox 复选框',
-        description: '多选控件',
-        icon: 'teal-500',
-        disabled: true,
-      },
-    ],
-  },
-]
-
-// 移动端菜单控制
-const showMobileMenu = ref(false)
-function toggleMobileMenu() {
-  showMobileMenu.value = !showMobileMenu.value
-}
+// 组件挂载后启动动画
+onMounted(() => {
+  setTimeout(() => {
+    isAnimationLoaded.value = true
+  }, 100)
+})
 </script>
 
 <template>
-  <view class="home-page">
-    <!-- 头部导航 -->
-    <view class="header">
-      <view class="header-content">
+  <view class="global-reset home-page">
+    <!-- 主视觉区域 -->
+    <view class="hero-section">
+      <!-- 动态背景 -->
+      <view class="bg-gradient" />
+      <view class="bg-pattern" />
+
+      <!-- 内容区 -->
+      <view class="content-container" :class="{ 'animate-in': isAnimationLoaded }">
         <view class="logo-container">
           <image class="logo" src="/static/logo.svg" mode="aspectFit" />
-          <text class="title">
+        </view>
+
+        <view class="text-content">
+          <text class="brand-name">
             Coral Design
           </text>
-        </view>
-
-        <!-- 桌面端导航 -->
-        <view class="desktop-nav">
-          <text class="nav-link" @click="openExternalLink('https://github.com/your-username/coral-design')">
-            GitHub
+          <text class="tagline">
+            现代 • 优雅 • 简约
           </text>
-          <text class="nav-link" @click="openDocs">
-            文档
+          <text class="description">
+            基于珊瑚色彩体系的现代化设计系统
           </text>
         </view>
 
-        <!-- 移动端菜单按钮 -->
-        <view class="mobile-menu-button" @click="toggleMobileMenu">
-          <view class="menu-icon" />
+        <view class="action-area">
+          <button class="action-btn primary" @click="jumpToPage('color')">
+            <text>色彩系统</text>
+          </button>
+
+          <button class="action-btn secondary" @click="jumpToPage('typography')">
+            <text>排版系统</text>
+          </button>
         </view>
       </view>
-
-      <!-- 移动端菜单 -->
-      <view class="mobile-menu" :class="{ 'mobile-menu--open': showMobileMenu }">
-        <text class="mobile-nav-link" @click="openExternalLink('https://github.com/your-username/coral-design')">
-          GitHub
-        </text>
-        <text class="mobile-nav-link" @click="openDocs">
-          文档
-        </text>
-      </view>
     </view>
 
-    <!-- 首页横幅 -->
-    <view class="banner">
-      <text class="banner-title">
-        现代、优雅的设计系统
-      </text>
-      <text class="banner-desc">
-        基于珊瑚主题的UI组件库，帮助开发者快速构建美观、一致的用户界面
-      </text>
-      <view class="banner-buttons">
-        <button class="primary-button" @click="jumpToPage('color')">
-          了解色彩系统
-        </button>
-        <text class="secondary-button" @click="openDocs">
-          查看文档
+    <!-- 设计理念 -->
+    <view class="design-philosophy" :class="{ 'animate-in': isAnimationLoaded }">
+      <view class="philosophy-container">
+        <text class="philosophy-title">
+          设计价值
         </text>
-      </view>
-    </view>
-
-    <!-- 组件分类展示 -->
-    <view class="main-content">
-      <view v-for="category in componentCategories" :key="category.id" class="component-category">
-        <text class="category-title">
-          {{ category.title }}
-        </text>
-        <text class="category-desc">
-          {{ category.description }}
+        <text class="philosophy-text">
+          在复杂中寻找简约，在简约中创造美感
         </text>
 
-        <view class="component-grid">
-          <view
-            v-for="item in category.items"
-            :key="item.id"
-            class="component-card"
-            :class="{ 'component-card--disabled': item.disabled }"
-            @click="!item.disabled && jumpToPage(item.id)"
-          >
-            <view class="card-icon" :style="{ 'background-color': `var(--${item.icon})` }" />
-            <text class="card-title">
-              {{ item.title }}
+        <view class="design-principles">
+          <view class="principle">
+            <view class="harmony principle-icon" />
+            <text class="principle-name">
+              和谐
             </text>
-            <text class="card-desc">
-              {{ item.description }}
+          </view>
+
+          <view class="principle">
+            <view class="principle-icon balance" />
+            <text class="principle-name">
+              平衡
             </text>
-            <text v-if="item.disabled" class="coming-soon-badge">
-              即将推出
+          </view>
+
+          <view class="principle">
+            <view class="principle-icon clarity" />
+            <text class="principle-name">
+              清晰
             </text>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 快速开始指南 -->
-    <view class="quick-start">
-      <text class="section-title">
-        快速开始
-      </text>
-      <text class="section-desc">
-        了解如何在您的项目中使用Coral Design
-      </text>
-
-      <view class="code-example">
-        <view class="code-block">
-          # 使用npm安装
-          npm install coral-design-ui
-
-          # 使用yarn安装
-          yarn add coral-design-ui
-
-          # 使用pnpm安装
-          pnpm add coral-design-ui
-
-          # 在项目中引入
-          import { createApp } from 'vue'
-          import CoralDesign from 'coral-design-ui'
-          import 'coral-design-ui/dist/style.css'
-
-          const app = createApp(App)
-          app.use(CoralDesign)
-          app.mount('#app')
-        </view>
-      </view>
-
-      <text class="text-button" @click="openDocs">
-        查看更多使用指南 →
-      </text>
-    </view>
-
+    <!-- 页脚 -->
     <view class="footer">
       <text class="copyright">
-        © {{ new Date().getFullYear() }} Coral Design. All rights reserved.
+        © {{ currentYear }} Coral Design
       </text>
     </view>
   </view>
 </template>
 
-<style lang="scss">
-@use '../design/index.scss' as *;
-
-// 变量
-$mobile-breakpoint: 768px;
-
-// 混合
-@mixin mobile {
-  @media (max-width: #{$mobile-breakpoint}) {
-    @content;
-  }
-}
-
-// 重置样式
-* {
-  box-sizing: border-box;
+<style lang="css">
+.global-reset {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-// 主页样式
 .home-page {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--bg-page);
-}
-
-// 头部导航
-.header {
-  position: sticky;
-  top: 0;
-  z-index: var(--z-sticky);
-  background-color: var(--white);
-  box-shadow: var(--shadow-sm);
-
-  .header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: var(--spacing-4);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .logo-container {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
-  }
-
-  .logo {
-    width: 36px;
-    height: 36px;
-
-    @include mobile {
-      width: 28px;
-      height: 28px;
-    }
-  }
-
-  .title {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-
-    @include mobile {
-      font-size: var(--font-size-lg);
-    }
-  }
-
-  .desktop-nav {
-    display: flex;
-    gap: var(--spacing-6);
-
-    @include mobile {
-      display: none;
-    }
-  }
-
-  .nav-link {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
-
-    &:hover {
-      color: var(--primary);
-    }
-  }
-
-  .mobile-menu-button {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-
-    @include mobile {
-      display: block;
-    }
-
-    .menu-icon {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background-color: var(--text-primary);
-      position: relative;
-
-      &::before,
-      &::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        background-color: var(--text-primary);
-        left: 0;
-      }
-
-      &::before {
-        top: -6px;
-      }
-
-      &::after {
-        bottom: -6px;
-      }
-    }
-  }
-
-  .mobile-menu {
-    display: none;
-    flex-direction: column;
-    padding: var(--spacing-4);
-    background-color: var(--white);
-    border-top: 1px solid var(--divider);
-
-    @include mobile {
-      display: none;
-
-      &--open {
-        display: flex;
-      }
-    }
-  }
-
-  .mobile-nav-link {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
-    padding: var(--spacing-3) 0;
-    cursor: pointer;
-
-    &:hover {
-      color: var(--primary);
-    }
-  }
-}
-
-// 首页横幅
-.banner {
-  background-color: var(--coral-50);
-  padding: var(--spacing-12) var(--spacing-4);
-  text-align: center;
-
-  @include mobile {
-    padding: var(--spacing-8) var(--spacing-4);
-  }
-
-  .banner-title {
-    display: block;
-    font-size: var(--font-size-h1);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-4);
-
-    @include mobile {
-      font-size: var(--font-size-h2);
-    }
-  }
-
-  .banner-desc {
-    display: block;
-    font-size: var(--font-size-lg);
-    color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto var(--spacing-6);
-
-    @include mobile {
-      font-size: var(--font-size-md);
-    }
-  }
-
-  .banner-buttons {
-    display: flex;
-    gap: var(--spacing-4);
-    justify-content: center;
-
-    @include mobile {
-      flex-direction: column;
-      gap: var(--spacing-3);
-      align-items: center;
-    }
-  }
-
-  .primary-button {
-    background-color: var(--primary);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius-md);
-    padding: var(--spacing-3) var(--spacing-6);
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
-    transition: background-color var(--transition-fast);
-
-    &:hover {
-      background-color: var(--primary-dark);
-    }
-  }
-
-  .secondary-button {
-    display: inline-block;
-    background-color: var(--white);
-    color: var(--primary);
-    border: 1px solid var(--primary);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-3) var(--spacing-6);
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color var(--transition-fast);
-
-    &:hover {
-      background-color: var(--coral-50);
-    }
-  }
-}
-
-// 主内容区域
-.main-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--spacing-8) var(--spacing-4);
-}
-
-// 组件分类
-.component-category {
-  margin-bottom: var(--spacing-12);
-
-  .category-title {
-    display: block;
-    font-size: var(--font-size-h3);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-2);
-  }
-
-  .category-desc {
-    display: block;
-    font-size: var(--font-size-md);
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-6);
-  }
-}
-
-// 组件卡片网格
-.component-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-4);
-
-  @include mobile {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-// 组件卡片
-.component-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-5);
-  background-color: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  overflow-x: hidden;
+  background-color: #FFFFFF;
+}
+
+/* 主视觉区域 */
+.hero-section {
+  position: relative;
+  height: 90vh;
+  min-height: 600px;
+  max-height: 900px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 背景元素 */
+.bg-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+    #FF7B5C 0%,
+    #FF5C7F 50%,
+    #B93D6B 100%);
+  z-index: 1;
+}
+
+.bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 30px 30px;
+  z-index: 2;
+}
+
+/* 内容区 */
+.content-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.content-container.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.logo-container {
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+}
+
+.text-content {
+  margin-bottom: 50px;
+}
+
+.brand-name {
+  display: block;
+  font-size: 68px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.5px;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+}
+
+.tagline {
+  display: block;
+  font-size: 26px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.95);
+  margin-bottom: 20px;
+  letter-spacing: 5px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.description {
+  display: block;
+  font-size: 20px;
+  color: rgba(255,255,255,0.9);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+.action-area {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 36px;
+  height: 56px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   cursor: pointer;
-
-  &:hover:not(.component-card--disabled) {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-  }
-
-  &--disabled {
-    opacity: 0.7;
-    cursor: default;
-  }
-
-  .card-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-3);
-  }
-
-  .card-title {
-    display: block;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-2);
-  }
-
-  .card-desc {
-    display: block;
-    font-size: var(--font-size-md);
-    color: var(--text-secondary);
-  }
-
-  .coming-soon-badge {
-    position: absolute;
-    top: var(--spacing-4);
-    right: var(--spacing-4);
-    background-color: var(--gray-200);
-    color: var(--text-secondary);
-    font-size: var(--font-size-xs);
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--radius-full);
-  }
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
-// 快速开始指南
-.quick-start {
-  background-color: var(--gray-50);
-  padding: var(--spacing-12) var(--spacing-4);
+.action-btn.primary {
+  background-color: white;
+  color: #E83E65;
+  border: none;
+}
+
+.action-btn.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.action-btn.secondary {
+  background-color: transparent;
+  color: white;
+  border: 2px solid rgba(255,255,255,0.9);
+}
+
+.action-btn.secondary:hover {
+  background-color: rgba(255,255,255,0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+/* 设计理念部分 */
+.design-philosophy {
+  background-color: #28283E;
+  color: white;
+  padding: 100px 40px;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease 0.2s, transform 1s ease 0.2s;
+  position: relative;
+}
+
+.design-philosophy.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.philosophy-container {
+  max-width: 800px;
+  width: 100%;
   text-align: center;
-
-  .section-title {
-    display: block;
-    font-size: var(--font-size-h3);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-2);
-  }
-
-  .section-desc {
-    display: block;
-    font-size: var(--font-size-md);
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-6);
-  }
-
-  .code-example {
-    max-width: 600px;
-    margin: 0 auto var(--spacing-6);
-    text-align: left;
-
-    .code-block {
-      background-color: var(--gray-900);
-      color: var(--white);
-      border-radius: var(--radius-md);
-      padding: var(--spacing-4);
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-sm);
-      white-space: pre;
-      overflow-x: auto;
-    }
-  }
-
-  .text-button {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }
 
-// 页脚
+.philosophy-title {
+  display: block;
+  font-size: 42px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.philosophy-text {
+  display: block;
+  font-size: 20px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 80px;
+  line-height: 1.6;
+}
+
+.design-principles {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+}
+
+.principle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.principle-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.harmony {
+  background: linear-gradient(135deg, #FF6D4B, #FF4C70);
+}
+
+.balance {
+  background: linear-gradient(135deg, #3ECBC6, #00A1B3);
+}
+
+.clarity {
+  background: linear-gradient(135deg, #60A5FA, #4F46E5);
+}
+
+.principle-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+
+/* 页脚 */
 .footer {
-  background-color: var(--white);
-  padding: var(--spacing-8) var(--spacing-4);
+  background-color: #20202D;
+  padding: 24px;
   text-align: center;
-  border-top: 1px solid var(--divider);
+  margin-top: auto;
+}
 
-  .copyright {
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
+.copyright {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .hero-section {
+    height: 80vh;
+  }
+
+  .brand-name {
+    font-size: 50px;
+  }
+
+  .tagline {
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
+
+  .description {
+    font-size: 18px;
+  }
+
+  .action-btn {
+    padding: 0 30px;
+    height: 52px;
+    font-size: 17px;
+  }
+
+  .design-philosophy {
+    padding: 80px 30px;
+  }
+
+  .philosophy-title {
+    font-size: 36px;
+  }
+
+  .philosophy-text {
+    font-size: 18px;
+    margin-bottom: 60px;
+  }
+
+  .design-principles {
+    gap: 50px;
+  }
+
+  .principle-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .principle-name {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-name {
+    font-size: 40px;
+  }
+
+  .tagline {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .action-area {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+    gap: 16px;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+
+  .design-principles {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .philosophy-text {
+    margin-bottom: 50px;
   }
 }
 </style>

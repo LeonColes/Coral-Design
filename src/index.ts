@@ -1,5 +1,5 @@
 import type { App, Component } from 'vue'
-import '@/design/index.scss'
+import '@/styles/index.css'
 
 // 定义模块类型
 interface ModuleType {

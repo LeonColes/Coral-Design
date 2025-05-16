@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <view class="typography-page">
+  <view class="global-reset typography-page">
     <view class="header">
       <text class="h1">
         Coral Design 排版系统
@@ -248,7 +248,7 @@
           <view class="showcase-label">
             大写文本
           </view>
-          <text class="text-md text-uppercase">
+          <text class="text-uppercase text-md">
             这段文本将显示为全大写形式
           </text>
         </view>
@@ -256,7 +256,7 @@
           <view class="showcase-label">
             小写文本
           </view>
-          <text class="text-md text-lowercase">
+          <text class="text-lowercase text-md">
             这段文本将显示为全小写形式
           </text>
         </view>
@@ -264,7 +264,7 @@
           <view class="showcase-label">
             首字母大写
           </view>
-          <text class="text-md text-capitalize">
+          <text class="text-capitalize text-md">
             这段文本每个单词的首字母将大写
           </text>
         </view>
@@ -272,7 +272,7 @@
           <view class="showcase-label">
             截断文本
           </view>
-          <text class="text-md truncate" style="max-width: 80%;">
+          <text class="truncate text-md" style="max-width: 80%;">
             这段文本过长时将被截断并显示省略号，这段文本过长时将被截断并显示省略号，这段文本过长时将被截断并显示省略号。
           </text>
         </view>
@@ -376,9 +376,7 @@
   </view>
 </template>
 
-<style lang="scss">
-@use '../design/index.scss' as *;
-
+<style lang="css" scoped>
 .typography-page {
   padding: var(--spacing-4);
   max-width: 800px;
@@ -391,18 +389,18 @@
 .header {
   margin: var(--spacing-8) 0 var(--spacing-10);
   text-align: center;
+}
 
-  .h1 {
-    color: var(--primary);
-    font-size: 2.5rem;
-    margin-bottom: var(--spacing-3);
-  }
+.header .h1 {
+  color: var(--primary);
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-3);
+}
 
-  .subtitle {
-    color: var(--text-secondary);
-    font-size: var(--font-size-xl);
-    display: block;
-  }
+.header .subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xl);
+  display: block;
 }
 
 .section {
@@ -411,26 +409,26 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-6);
   box-shadow: var(--shadow-sm);
+}
 
-  &-header {
-    margin-bottom: var(--spacing-6);
-    padding-bottom: var(--spacing-3);
-    border-bottom: 1px solid var(--gray-200);
-    display: flex;
-    flex-direction: column;
-  }
+.section-header {
+  margin-bottom: var(--spacing-6);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  flex-direction: column;
+}
 
-  .h2 {
-    font-size: var(--font-size-h2);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-1);
-  }
+.section .h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-1);
+}
 
-  &-desc {
-    color: var(--text-secondary);
-    font-size: var(--font-size-md);
-  }
+.section-desc {
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
 }
 
 .typography-showcase {
@@ -441,44 +439,44 @@
 .showcase-item {
   padding: var(--spacing-4);
   border-bottom: 1px solid var(--gray-200);
+}
 
-  &:last-child {
-    border-bottom: none;
-  }
+.showcase-item:last-child {
+  border-bottom: none;
+}
 
-  .showcase-label {
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-3);
-    font-family: var(--font-family-mono);
-    display: block;
-  }
+.showcase-item .showcase-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-3);
+  font-family: var(--font-family-mono);
+  display: block;
+}
 
-  .sample {
-    color: var(--primary);
-  }
+.showcase-item .sample {
+  color: var(--primary);
 }
 
 .showcase-header {
   margin-bottom: var(--spacing-3);
+}
 
-  .showcase-title {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-1);
-    display: block;
-  }
+.showcase-header .showcase-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-1);
+  display: block;
+}
 
-  .showcase-tag {
-    display: inline-block;
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-xs);
-    color: var(--primary);
-    background-color: var(--gray-100);
-    padding: 2px 6px;
-    border-radius: var(--radius-sm);
-  }
+.showcase-header .showcase-tag {
+  display: inline-block;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--primary);
+  background-color: var(--gray-100);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
 }
 
 .showcase-grid {
@@ -493,98 +491,92 @@
   background-color: var(--gray-50);
   min-width: 200px;
   flex: 1;
-
-  .weight-sample {
-    display: block;
-    font-size: var(--font-size-xl);
-    margin-top: var(--spacing-2);
-    color: var(--primary);
-  }
 }
 
-.full-example {
-  .h3 {
-    margin-bottom: var(--spacing-3);
-    color: var(--primary);
-  }
-
-  .h4 {
-    margin-top: var(--spacing-6);
-    margin-bottom: var(--spacing-3);
-    color: var(--primary-dark);
-  }
-
-  .text-md {
-    margin-bottom: var(--spacing-3);
-    line-height: var(--line-height-base);
-  }
-
-  .principle {
-    display: flex;
-    margin-bottom: var(--spacing-2);
-
-    &-title {
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-      min-width: 70px;
-    }
-
-    &-desc {
-      color: var(--text-secondary);
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+.weight-card .weight-sample {
+  display: block;
+  font-size: var(--font-size-xl);
+  margin-top: var(--spacing-2);
+  color: var(--primary);
 }
 
-// 响应式排版演示
+.full-example .h3 {
+  margin-bottom: var(--spacing-3);
+  color: var(--primary);
+}
+
+.full-example .h4 {
+  margin-top: var(--spacing-6);
+  margin-bottom: var(--spacing-3);
+  color: var(--primary-dark);
+}
+
+.full-example .text-md {
+  margin-bottom: var(--spacing-3);
+  line-height: var(--line-height-base);
+}
+
+.full-example .principle {
+  display: flex;
+  margin-bottom: var(--spacing-2);
+}
+
+.full-example .principle-title {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  min-width: 70px;
+}
+
+.full-example .principle-desc {
+  color: var(--text-secondary);
+}
+
+.full-example .principle:last-child {
+  margin-bottom: 0;
+}
+
+/* 响应式排版演示 */
 .responsive-demo {
   display: flex;
   gap: var(--spacing-6);
   margin-top: var(--spacing-4);
-
-  .demo-screen {
-    background-color: var(--gray-50);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-4);
-    flex: 1;
-
-    &.desktop {
-      border: 2px solid var(--primary-light);
-    }
-
-    &.mobile {
-      border: 2px solid var(--t-500);
-      max-width: 240px;
-    }
-  }
-
-  .demo-label {
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-2);
-    font-weight: var(--font-weight-medium);
-  }
 }
 
-// 响应式调整
+.responsive-demo .demo-screen {
+  background-color: var(--gray-50);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+  flex: 1;
+}
+
+.responsive-demo .demo-screen.desktop {
+  border: 2px solid var(--primary-light);
+}
+
+.responsive-demo .demo-screen.mobile {
+  border: 2px solid var(--t-500);
+  max-width: 240px;
+}
+
+.responsive-demo .demo-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-2);
+  font-weight: var(--font-weight-medium);
+}
+
+/* 响应式调整 */
 @media (max-width: 768px) {
   .showcase-grid {
     flex-direction: column;
   }
 
-  .weight-card {
-    min-width: 100%;
-  }
-
   .responsive-demo {
     flex-direction: column;
+  }
 
-    .demo-screen.mobile {
-      max-width: none;
-    }
+  .responsive-demo .demo-screen.mobile {
+    max-width: 100%;
   }
 }
 </style>
