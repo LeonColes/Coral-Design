@@ -5,7 +5,11 @@
       "type": "home"
     },
     {
-      "path": "pages/button",
+      "path": "pages/color",
+      "type": "page"
+    },
+    {
+      "path": "pages/typography",
       "type": "page"
     }
   ],

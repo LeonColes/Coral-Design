@@ -5,7 +5,8 @@
 
 interface NavigateToOptions {
   url: "/pages/index" |
-       "/pages/button";
+       "/pages/color" |
+       "/pages/typography";
 }
 interface RedirectToOptions extends NavigateToOptions {}
 

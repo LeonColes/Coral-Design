@@ -1,0 +1,136 @@
+// Coral Design System - 主入口文件
+/**
+ * Coral Design System
+ * 现代、优雅、灵活的设计系统
+ */
+
+// 导入颜色系统
+@use './colors.scss' as *;
+
+// 导入排版系统
+@use './typography.scss' as *;
+
+// 统一基础样式
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-base);
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+}
+
+// 全局变量
+:root {
+  // 全局圆角
+  --radius-none: 0;
+  --radius-sm: 0.125rem;    // 2px
+  --radius-md: 0.25rem;     // 4px
+  --radius-lg: 0.5rem;      // 8px
+  --radius-xl: 1rem;        // 16px
+  --radius-full: 9999px;    // 圆形
+  
+  // 间距 (4的倍数)
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;     // 4px
+  --spacing-2: 0.5rem;      // 8px
+  --spacing-3: 0.75rem;     // 12px
+  --spacing-4: 1rem;        // 16px
+  --spacing-5: 1.25rem;     // 20px
+  --spacing-6: 1.5rem;      // 24px
+  --spacing-8: 2rem;        // 32px
+  --spacing-10: 2.5rem;     // 40px
+  --spacing-12: 3rem;       // 48px
+  --spacing-16: 4rem;       // 64px
+  --spacing-20: 5rem;       // 80px
+  --spacing-24: 6rem;       // 96px
+  
+  // 阴影
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  // 过渡时间
+  --transition-fast: 150ms;
+  --transition-normal: 300ms;
+  --transition-slow: 500ms;
+  
+  // Z-Index 层级
+  --z-negative: -1;         // 负层级
+  --z-base: 1;              // 基础层级
+  --z-dropdown: 10;         // 下拉菜单
+  --z-sticky: 100;          // 粘性元素
+  --z-drawer: 200;          // 抽屉
+  --z-modal: 300;           // 模态框
+  --z-popover: 400;         // 弹出提示
+  --z-toast: 500;           // 轻提示
+}
+
+// 辅助类
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// 可见性通用类
+.hide {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+.visible {
+  visibility: visible !important;
+}
+
+// 布局通用类
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+// 间距通用类
+.p-0 { padding: 0; }
+.m-0 { margin: 0; }
+
+// 响应式通用类
+@media (max-width: 768px) {
+  .hide-sm {
+    display: none !important;
+  }
+}
+
+// 可以在这里添加其他全局样式

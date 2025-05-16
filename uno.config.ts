@@ -28,83 +28,55 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      // Primary
-      primary: {
-        DEFAULT: '#FF7E6A',
-        dark: '#E55C48',
-        light: '#FFD6D0',
+      // 珊瑚色系
+      coral: {
+        50: 'var(--coral-50)',
+        100: 'var(--coral-100)',
+        500: 'var(--coral-500)',
+        700: 'var(--coral-700)',
+        900: 'var(--coral-900)',
       },
-
-      // Secondary
-      secondary: {
-        DEFAULT: '#3ECDC4',
-        dark: '#35A39B',
-        light: '#8EEAE3',
+      // 青绿色系
+      teal: {
+        50: 'var(--teal-50)',
+        100: 'var(--teal-100)',
+        500: 'var(--teal-500)',
+        700: 'var(--teal-700)',
+        900: 'var(--teal-900)',
       },
+      // 其他颜色...
+    },
+    fontSize: {
+      'xs': 'var(--font-size-xs)',
+      'sm': 'var(--font-size-sm)',
+      'base': 'var(--font-size-base)',
+      'lg': 'var(--font-size-lg)',
+      'xl': 'var(--font-size-xl)',
+      '2xl': 'var(--font-size-2xl)',
+      '3xl': 'var(--font-size-3xl)',
+      '4xl': 'var(--font-size-4xl)',
+      '5xl': 'var(--font-size-5xl)',
+    },
+    // 其他主题配置...
+  },
 
-      // Neutral
-      neutral: {
-        50: '#FFFAF9',  // 页面背景
-        100: '#F7F7F7', // 卡片底部背景
-        200: '#EEEEEE', // 分割线、边框
-        300: '#E0E0E0', // 禁用状态
-        400: '#BDBDBD', // 轻微强调
-        500: '#9E9E9E', // 提示文本
-        600: '#757575', // 次要文本
-        700: '#616161', // 次要文本
-        800: '#424242', // 标题
-        900: '#212121', // 主要文本
-      },
+  // 添加快捷方式
+  shortcuts: {
+    // 标题
+    'h1': 'text-4xl font-bold leading-tight',
+    'h2': 'text-3xl font-bold leading-tight',
+    'h3': 'text-2xl font-medium leading-tight',
+    'h4': 'text-xl font-medium leading-normal',
+    'h5': 'text-lg font-medium leading-normal',
+    'h6': 'text-base font-medium leading-normal',
 
-      white: '#FFFFFF',
-      background: '#FFFAF9',
-      surface: '#FFFFFF',
-      border: '#EEEEEE',
-      disabled: '#E0E0E0',
+    // 按钮
+    'btn': 'px-4 py-2 rounded-md transition-all duration-200',
+    'btn-primary': 'bg-coral-500 text-white hover:bg-coral-700',
+    'btn-secondary': 'bg-teal-500 text-white hover:bg-teal-700',
 
-      // Functional
-      success: '#4CAF50',
-      info: '#2196F3',
-      warning: '#FF9800',
-      error: '#F44336',
-
-      text: {
-        primary: '#212121',
-        secondary: '#616161',
-        hint: '#9E9E9E',
-        disabled: '#9E9E9E',
-        light: '#FFFFFF',
-      },
-      
-      fontFamily: {
-        sans: '"SF Pro Display", Inder, sans-serif'
-      },
-
-      fontSize: {
-        xs: '12px',
-        sm: '13px',
-        base: '15px',
-        lg: '17px',
-        xl: '20px',
-      },
-
-      // 边距尺寸
-      spacing: {
-        xs: '4px',
-        sm: '8px',
-        md: '12px',
-        lg: '16px',
-        xl: '24px',
-      },
-
-      // 圆角
-      borderRadius: {
-        none: '0',
-        sm: '4px',
-        md: '8px',
-        lg: '16px',
-        full: '100px', // 完全圆形的圆角
-      },
-    }
-  }
+    // 卡片
+    'card': 'bg-white rounded-lg shadow p-4',
+    // 更多快捷方式...
+  },
 })

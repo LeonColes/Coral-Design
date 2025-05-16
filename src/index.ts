@@ -1,4 +1,5 @@
 import type { App, Component } from 'vue'
+import '@/design/index.scss'
 
 // 定义模块类型
 interface ModuleType {
@@ -19,7 +20,7 @@ Object.entries(modules).forEach(([path, module]) => {
     .pop()
     ?.replace(/\.vue$/, '')
     ?.replace(/-(\w)/g, (_, c) => c.toUpperCase()) // 将kebab-case转为camelCase
-    
+
   if (componentName && module.default) {
     // 添加非空检查
     components[componentName] = module.default
@@ -27,7 +28,7 @@ Object.entries(modules).forEach(([path, module]) => {
 })
 
 // 插件安装函数 - 使用箭头函数
-const install = (app: App): void => {
+function install(app: App): void {
   // 注册所有组件
   Object.entries(components).forEach(([name, component]) => {
     if (component) { // 添加额外的非空检查
