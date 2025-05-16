@@ -2,9 +2,9 @@
 import { onMounted, ref } from 'vue'
 
 // 导航函数
-function jumpToPage(path: string) {
+function jumpToComponents() {
   uni.navigateTo({
-    url: `/pages/${path}`,
+    url: '/pages/components',
   })
 }
 
@@ -49,47 +49,55 @@ onMounted(() => {
         </view>
 
         <view class="action-area">
-          <button class="action-btn primary" @click="jumpToPage('color')">
-            <text>色彩系统</text>
-          </button>
-
-          <button class="action-btn secondary" @click="jumpToPage('typography')">
-            <text>排版系统</text>
+          <button class="action-btn" @click="jumpToComponents">
+            <text>快速上手</text>
           </button>
         </view>
       </view>
     </view>
 
-    <!-- 设计理念 -->
-    <view class="design-philosophy" :class="{ 'animate-in': isAnimationLoaded }">
-      <view class="philosophy-container">
-        <text class="philosophy-title">
-          设计价值
-        </text>
-        <text class="philosophy-text">
-          在复杂中寻找简约，在简约中创造美感
+    <!-- 设计故事 -->
+    <view class="design-story" :class="{ 'animate-in': isAnimationLoaded }">
+      <view class="story-container">
+        <text class="story-title">
+          设计之源
         </text>
 
-        <view class="design-principles">
-          <view class="principle">
-            <view class="harmony principle-icon" />
-            <text class="principle-name">
-              和谐
-            </text>
+        <view class="story-content">
+          <view class="story-section">
+            <view class="story-icon inspiration" />
+            <view class="story-text-container">
+              <text class="story-section-title">
+                灵感之旅
+              </text>
+              <text class="story-text">
+                Coral Design源于对海洋珊瑚礁生态系统的观察与启发。珊瑚礁以其丰富的色彩、精美的结构和平衡的生态系统，成为我们设计语言的核心灵感。
+              </text>
+            </view>
           </view>
 
-          <view class="principle">
-            <view class="principle-icon balance" />
-            <text class="principle-name">
-              平衡
-            </text>
+          <view class="story-section">
+            <view class="story-icon philosophy" />
+            <view class="story-text-container">
+              <text class="story-section-title">
+                设计哲学
+              </text>
+              <text class="story-text">
+                如同珊瑚礁那样，我们追求系统中各元素的和谐共存。每个组件都是独立的，又能与整体无缝融合，共同构成一个平衡、友好且高效的界面生态系统。
+              </text>
+            </view>
           </view>
 
-          <view class="principle">
-            <view class="principle-icon clarity" />
-            <text class="principle-name">
-              清晰
-            </text>
+          <view class="story-section">
+            <view class="story-icon journey" />
+            <view class="story-text-container">
+              <text class="story-section-title">
+                未来之路
+              </text>
+              <text class="story-text">
+                我们的愿景是创建一个不断进化的设计系统，就像珊瑚礁随着时间生长和适应一样。我们不断探索新的可能性，致力于为用户体验带来更多创新与美感。
+              </text>
+            </view>
           </view>
         </view>
       </view>
@@ -124,8 +132,8 @@ onMounted(() => {
 .hero-section {
   position: relative;
   height: 90vh;
-  min-height: 600px;
-  max-height: 900px;
+  min-height: 550px;
+  max-height: 800px;
   width: 100%;
   overflow: hidden;
   display: flex;
@@ -169,7 +177,7 @@ onMounted(() => {
   align-items: center;
   text-align: center;
   max-width: 800px;
-  padding: 0 40px;
+  width: 100%;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 1s ease, transform 1s ease;
@@ -225,8 +233,6 @@ onMounted(() => {
 }
 
 .action-area {
-  display: flex;
-  gap: 24px;
   margin-top: 20px;
 }
 
@@ -234,44 +240,30 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 36px;
+  padding: 0 40px;
   height: 56px;
-  border-radius: 12px;
+  border-radius: 28px;
   font-size: 18px;
   font-weight: 600;
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.action-btn.primary {
   background-color: white;
   color: #E83E65;
   border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
-.action-btn.primary:hover {
+.action-btn:hover,
+.action-btn:active {
   transform: translateY(-3px);
   box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
 
-.action-btn.secondary {
-  background-color: transparent;
-  color: white;
-  border: 2px solid rgba(255,255,255,0.9);
-}
-
-.action-btn.secondary:hover {
-  background-color: rgba(255,255,255,0.15);
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-}
-
-/* 设计理念部分 */
-.design-philosophy {
+/* 设计故事部分 */
+.design-story {
   background-color: #28283E;
   color: white;
-  padding: 100px 40px;
+  padding: 60px 0 0 0;
   display: flex;
   justify-content: center;
   opacity: 0;
@@ -280,73 +272,75 @@ onMounted(() => {
   position: relative;
 }
 
-.design-philosophy.animate-in {
+.design-story.animate-in {
   opacity: 1;
   transform: translateY(0);
 }
 
-.philosophy-container {
-  max-width: 800px;
+.story-container {
+  max-width: 900px;
   width: 100%;
   text-align: center;
+  padding: 0;
 }
 
-.philosophy-title {
+.story-title {
   display: block;
   font-size: 42px;
   font-weight: 700;
   color: white;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
-.philosophy-text {
-  display: block;
-  font-size: 20px;
-  color: rgba(255,255,255,0.8);
-  margin-bottom: 80px;
-  line-height: 1.6;
-}
-
-.design-principles {
-  display: flex;
-  justify-content: center;
-  gap: 80px;
-}
-
-.principle {
+.story-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 40px;
 }
 
-.principle-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  margin-bottom: 20px;
+.story-section {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  text-align: left;
+  gap: 20px;
+}
+
+.story-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  flex-shrink: 0;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
-.harmony {
+.inspiration {
   background: linear-gradient(135deg, #FF6D4B, #FF4C70);
 }
 
-.balance {
+.philosophy {
   background: linear-gradient(135deg, #3ECBC6, #00A1B3);
 }
 
-.clarity {
+.journey {
   background: linear-gradient(135deg, #60A5FA, #4F46E5);
 }
 
-.principle-name {
-  font-size: 20px;
+.story-text-container {
+  flex: 1;
+}
+
+.story-section-title {
+  display: block;
+  font-size: 24px;
   font-weight: 600;
   color: white;
+  margin-bottom: 10px;
+}
+
+.story-text {
+  display: block;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
 }
 
 /* 页脚 */
@@ -383,34 +377,28 @@ onMounted(() => {
 
   .action-btn {
     padding: 0 30px;
-    height: 52px;
+    height: 50px;
     font-size: 17px;
   }
 
-  .design-philosophy {
-    padding: 80px 30px;
+  .design-story {
+    padding: 40px 0 0 0;
   }
 
-  .philosophy-title {
+  .story-title {
     font-size: 36px;
+    margin-bottom: 40px;
   }
 
-  .philosophy-text {
-    font-size: 18px;
-    margin-bottom: 60px;
+  .story-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
   }
 
-  .design-principles {
-    gap: 50px;
-  }
-
-  .principle-icon {
-    width: 60px;
-    height: 60px;
-  }
-
-  .principle-name {
-    font-size: 18px;
+  .story-section-title {
+    font-size: 20px;
   }
 }
 
@@ -428,24 +416,12 @@ onMounted(() => {
     font-size: 16px;
   }
 
-  .action-area {
-    flex-direction: column;
-    width: 100%;
-    max-width: 280px;
-    gap: 16px;
+  .story-title {
+    font-size: 30px;
   }
 
-  .action-btn {
-    width: 100%;
-  }
-
-  .design-principles {
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .philosophy-text {
-    margin-bottom: 50px;
+  .story-content {
+    gap: 30px;
   }
 }
 </style>

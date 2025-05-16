@@ -6,6 +6,7 @@
 interface NavigateToOptions {
   url: "/pages/index" |
        "/pages/color" |
+       "/pages/components" |
        "/pages/typography";
 }
 interface RedirectToOptions extends NavigateToOptions {}
