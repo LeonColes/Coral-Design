@@ -7,7 +7,7 @@ interface ModuleType {
 }
 
 // 自动导入所有组件
-const modules = import.meta.glob<ModuleType>('./components/*.vue', { eager: true })
+const modules = import.meta.glob<ModuleType>('./components/*/*.vue', { eager: true })
 
 // 组件集合
 const components: Record<string, Component> = {}

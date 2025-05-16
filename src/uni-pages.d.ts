@@ -5,6 +5,7 @@
 
 interface NavigateToOptions {
   url: "/pages/index" |
+       "/pages/button" |
        "/pages/color" |
        "/pages/components" |
        "/pages/typography";

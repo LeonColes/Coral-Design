@@ -4,15 +4,39 @@ function goBack() {
   uni.navigateBack()
 }
 
+// 定义组件项类型
+interface ComponentItem {
+  title: string
+  desc: string
+  icon: string
+  status: 'planning' | 'completed'
+  path?: string
+}
+
+// 跳转到组件详情页
+function goToComponent(path: string | undefined, status: string) {
+  if (status === 'planning' || !path) {
+    uni.showToast({
+      title: '该组件正在规划中',
+      icon: 'none',
+    })
+    return
+  }
+
+  uni.navigateTo({
+    url: `./${path}`,
+  })
+}
+
 // 目前的组件列表
 const componentList = [
   {
     name: '基础组件',
     items: [
-      { title: '按钮 Button', desc: '多样式按钮组件', icon: 'button', status: 'planning' },
+      { title: '按钮 Button', desc: '多样式按钮组件', icon: 'button', status: 'completed', path: 'button' },
       { title: '图标 Icon', desc: '图标集合', icon: 'icon', status: 'planning' },
       { title: '文本 Text', desc: '文本显示组件', icon: 'text', status: 'planning' },
-    ],
+    ] as ComponentItem[],
   },
   {
     name: '表单组件',
@@ -20,7 +44,7 @@ const componentList = [
       { title: '输入框 Input', desc: '接收用户输入', icon: 'input', status: 'planning' },
       { title: '选择器 Select', desc: '下拉选择组件', icon: 'select', status: 'planning' },
       { title: '单选框 Radio', desc: '单选组件', icon: 'radio', status: 'planning' },
-    ],
+    ] as ComponentItem[],
   },
   {
     name: '反馈组件',
@@ -28,7 +52,7 @@ const componentList = [
       { title: '对话框 Dialog', desc: '模态对话框', icon: 'dialog', status: 'planning' },
       { title: '提示 Toast', desc: '轻量级反馈', icon: 'toast', status: 'planning' },
       { title: '加载 Loading', desc: '加载状态', icon: 'loading', status: 'planning' },
-    ],
+    ] as ComponentItem[],
   },
 ]
 </script>
@@ -70,6 +94,7 @@ const componentList = [
               v-for="(component, componentIndex) in category.items"
               :key="componentIndex"
               class="component-card"
+              @click="goToComponent(component.path, component.status)"
             >
               <view class="component-content">
                 <view class="component-info">

@@ -1,36 +1,32 @@
 @charset "UTF-8";
 /**
- * Coral Design 排版系统
- * 基于SF Pro Display的现代排版规范
+ * Coral Design 重置样式
+ * 全局重置和基础样式定义
  */
-:root {
-  --font-family-base: SF Pro Display, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;
-  --font-family-heading: SF Pro Display, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;
-  --font-family-mono: SF Mono, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-  --font-weight-light: 300;
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  --font-size-xs: 0.75rem;   /* 12px */
-  --font-size-sm: 0.875rem;  /* 14px */
-  --font-size-md: 1rem;      /* 16px */
-  --font-size-lg: 1.125rem;  /* 18px */
-  --font-size-xl: 1.25rem;   /* 20px */
-  --font-size-h1: 2.5rem;    /* 40px */
-  --font-size-h2: 2rem;      /* 32px */
-  --font-size-h3: 1.75rem;   /* 28px */
-  --font-size-h4: 1.5rem;    /* 24px */
-  --font-size-h5: 1.25rem;   /* 20px */
-  --font-size-h6: 1.125rem;  /* 18px */
-  --line-height-tight: 1.25;
-  --line-height-base: 1.5;
-  --line-height-loose: 1.75;
-  --letter-spacing-tight: -0.025em;
-  --letter-spacing-normal: 0;
-  --letter-spacing-wide: 0.025em;
+
+/* 全局重置样式 */
+.global-reset {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* 基础元素样式重置 */
+body, view, scroll-view, swiper, text, image, button, input, textarea {
+  box-sizing: border-box;
+  font-family: var(--font-family-base);
+}
+
+/* 基础文档样式 */
+body {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-base);
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+  margin: 0;
+}
+
+/* 标题样式 */
 .h1 {
   font-size: var(--font-size-h1);
   font-weight: var(--font-weight-bold);
@@ -79,8 +75,7 @@
   margin-bottom: 0.5rem;
 }
 
-/* #ifndef MP */
-/* #endif */
+/* 文本尺寸类 */
 .text-xs {
   font-size: var(--font-size-xs);
   line-height: var(--line-height-base);
@@ -106,6 +101,7 @@
   line-height: var(--line-height-base);
 }
 
+/* 字重类 */
 .font-light {
   font-weight: var(--font-weight-light);
 }
@@ -126,6 +122,7 @@
   font-weight: var(--font-weight-bold);
 }
 
+/* 行高类 */
 .leading-tight {
   line-height: var(--line-height-tight);
 }
@@ -138,6 +135,7 @@
   line-height: var(--line-height-loose);
 }
 
+/* 文本转换类 */
 .text-uppercase {
   text-transform: uppercase;
 }
@@ -150,6 +148,7 @@
   text-transform: capitalize;
 }
 
+/* 文本对齐类 */
 .text-left {
   text-align: left;
 }
@@ -160,17 +159,4 @@
 
 .text-right {
   text-align: right;
-}
-
-@media (max-width: 768px) {
-  :root {
-    --font-size-h1: 2.25rem;
-    --font-size-h2: 1.75rem;
-    --font-size-h3: 1.5rem;
-    --font-size-h4: 1.25rem;
-    --font-size-h5: 1.125rem;
-    --font-size-h6: 1rem;
-  }
-}
-
-
+} 

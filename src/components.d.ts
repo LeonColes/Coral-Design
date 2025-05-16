@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    CoralButton: typeof import('./components/Coral-Button.vue')['default']
-    ReButtonSrcReButton: typeof import('./components/re-button/src/re-button.vue')['default']
+    Button: typeof import('./components/button/index.vue')['default']
   }
 }
