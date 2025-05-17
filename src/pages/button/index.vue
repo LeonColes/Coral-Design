@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 // 引入按钮组件
-import CoralButton from '../components/button/index.vue'
+import CoralButton from '@/components/button/index.vue'
+import { ref, watch } from 'vue'
 
 // 按钮类型定义
 type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger'

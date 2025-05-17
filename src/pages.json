@@ -5,15 +5,15 @@
       "type": "home"
     },
     {
-      "path": "pages/button",
+      "path": "pages/button/index",
       "type": "page"
     },
     {
-      "path": "pages/color",
+      "path": "pages/colors/index",
       "type": "page"
     },
     {
-      "path": "pages/components",
+      "path": "pages/components-list/index",
       "type": "page",
       "style": {
         "navigationBarTitleText": "组件库",
@@ -21,7 +21,7 @@
       }
     },
     {
-      "path": "pages/typography",
+      "path": "pages/typography/index",
       "type": "page"
     }
   ],
