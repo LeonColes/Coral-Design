@@ -8,5 +8,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('./components/button/index.vue')['default']
+    Navbar: typeof import('./components/navbar/index.vue')['default']
   }
 }

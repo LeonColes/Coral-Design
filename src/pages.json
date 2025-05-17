@@ -25,6 +25,13 @@
       }
     },
     {
+      "path": "pages/navbar/index",
+      "type": "page",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/typography/index",
       "type": "page"
     }
