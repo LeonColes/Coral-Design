@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
-const props = defineProps({
+// 定义组件属性
+defineProps({
   /**
    * 标题
    */
@@ -28,14 +29,14 @@ const props = defineProps({
    */
   backgroundColor: {
     type: String,
-    default: 'var(--primary)',
+    default: '#FF7E6A',
   },
   /**
    * 文字颜色
    */
   titleColor: {
     type: String,
-    default: 'var(--white)',
+    default: 'white',
   },
   /**
    * 是否固定在顶部
@@ -51,42 +52,77 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  /**
+   * 是否显示返回按钮
+   */
+  showBack: {
+    type: Boolean,
+    default: true,
+  },
 })
 
-// 提取属性到本地变量，确保默认值生效
-const computedTitle = computed(() => props.title || '')
+// 事件
+const emits = defineEmits(['back-click'])
 
 // 状态变量
+const statusBarHeight = ref(0)
 const contentHeight = ref(0)
 const navBarHeight = ref(0)
 
-// 获取导航栏高度（包括状态栏）
+/**
+ * 获取导航栏高度（包括状态栏）
+ * 根据不同平台动态计算导航栏高度
+ */
 function getNavBarHeight() {
   // 获取窗口信息
-  const { statusBarHeight, windowWidth } = uni.getWindowInfo()
+  const { statusBarHeight: sysStatusBarHeight, windowWidth } = uni.getWindowInfo()
+  // 设置状态栏高度
+  statusBarHeight.value = sysStatusBarHeight
+
   // #ifdef MP-WEIXIN
   // 微信小程序环境 - 使用胶囊按钮位置计算导航栏高度
   try {
     const { top, height } = uni.getMenuButtonBoundingClientRect()
-    navBarHeight.value = (top - statusBarHeight) * 2 + height + statusBarHeight
+    contentHeight.value = height
+    // 计算导航栏高度：状态栏 + 内容区
+    navBarHeight.value = (top - sysStatusBarHeight) * 2 + height + sysStatusBarHeight
   }
   catch {
     // 获取失败时使用动态计算的方式
-    navBarHeight.value = statusBarHeight + Math.round(windowWidth * 0.11)
+    contentHeight.value = Math.round(windowWidth * 0.09)
+    navBarHeight.value = sysStatusBarHeight + Math.round(windowWidth * 0.11)
   }
   // #endif
-  // #ifndef H5 || MP-WEIXIN
-  // 其他环境 - 根据屏幕比例计算
-  navBarHeight.value = statusBarHeight + Math.round(windowWidth * 0.11)
+
+  // #ifdef H5
+  // H5环境使用固定高度计算
+  contentHeight.value = 44
+  navBarHeight.value = sysStatusBarHeight + contentHeight.value
   // #endif
+
+  // #ifndef MP-WEIXIN || H5
+  // 其他环境 - 根据屏幕比例计算
+  contentHeight.value = Math.round(windowWidth * 0.09)
+  navBarHeight.value = sysStatusBarHeight + Math.round(windowWidth * 0.09)
+  // #endif
+}
+
+/**
+ * 返回按钮点击事件
+ */
+function handleBackClick() {
+  emits('back-click')
 }
 
 // 对外暴露方法
 defineExpose({
-  // 刷新系统信息 - 用于处理iPhone手机打电话和开热点导致导航栏样式错乱
+  /**
+   * 刷新系统信息 - 适用于需要重新计算导航栏高度的场景
+   */
   getNavBarHeight,
 })
 
+// 组件挂载时初始化导航栏高度
 onMounted(() => {
   getNavBarHeight()
 })
@@ -98,33 +134,40 @@ onMounted(() => {
     class="navbar"
     :style="{
       height: `${navBarHeight}px`,
-      backgroundColor: props.backgroundColor,
-      position: props.fixed ? 'fixed' : 'static',
+      backgroundColor,
+      position: fixed ? 'fixed' : 'static',
       top: 0,
       left: 0,
       right: 0,
       zIndex: 999,
-      borderBottom: props.border ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+      borderBottom: border ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
     }"
   >
+    <!-- 状态栏 -->
+    <view v-if="statusBarHeight > 0" class="status-bar" :style="{ height: `${statusBarHeight}px`, backgroundColor }" />
+
     <!-- 导航栏内容 -->
     <view class="navbar-content" :style="{ height: `${contentHeight}px` }">
       <!-- 左侧区域 -->
       <view class="navbar-left">
-        <slot name="left" />
+        <slot name="left">
+          <view v-if="showBack" class="back-button" @click="handleBackClick">
+            <view class="back-icon" :style="{ borderColor: titleColor }" />
+            <text class="back-text" :style="{ color: titleColor }">
+              返回
+            </text>
+          </view>
+        </slot>
       </view>
 
       <!-- 中间区域（标题） -->
       <view
         class="navbar-title"
-        :style="{
-          color: props.titleColor,
-          textAlign: props.titleCenter ? 'center' : 'left',
-          justifyContent: props.titleCenter ? 'center' : 'flex-start',
-        }"
+        :class="{ 'navbar-title--center': titleCenter }"
+        :style="{ color: titleColor }"
       >
         <slot name="title">
-          {{ computedTitle }}
+          {{ title }}
         </slot>
       </view>
 
@@ -135,14 +178,20 @@ onMounted(() => {
     </view>
   </view>
 
-  <!-- 填充占位 -->
+  <!-- 填充占位，用于fixed定位时补充空间 -->
   <view v-if="showBlock" :style="{ height: `${navBarHeight}px` }" />
 </template>
 
 <style scoped>
 .navbar {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
 
+.status-bar {
+  width: 100%;
 }
 
 .navbar-content {
@@ -150,6 +199,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   position: relative;
+  box-sizing: border-box;
 }
 
 .navbar-left {
@@ -158,6 +208,25 @@ onMounted(() => {
   align-items: center;
   padding-left: 16px;
   z-index: 1;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.back-icon {
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  transform: rotate(-45deg);
+  margin-right: 4px;
+}
+
+.back-text {
+  font-size: 14px;
 }
 
 .navbar-title {
@@ -171,6 +240,15 @@ onMounted(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
   padding: 0 16px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  justify-content: flex-start;
+}
+
+.navbar-title--center {
+  justify-content: center;
+  text-align: center;
 }
 
 .navbar-right {
