@@ -133,6 +133,17 @@
   --z-modal: 300;
   --z-popover: 400;
   --z-toast: 500;
+  
+  /* 黄金分割比例 */
+  --golden-ratio: 1.618;
+  --golden-ratio-padding-mini-v: 5px;
+  --golden-ratio-padding-mini-h: calc(var(--golden-ratio-padding-mini-v) * var(--golden-ratio));
+  --golden-ratio-padding-small-v: 6px;
+  --golden-ratio-padding-small-h: calc(var(--golden-ratio-padding-small-v) * var(--golden-ratio));
+  --golden-ratio-padding-medium-v: 8px;
+  --golden-ratio-padding-medium-h: calc(var(--golden-ratio-padding-medium-v) * var(--golden-ratio));
+  --golden-ratio-padding-large-v: 10px;
+  --golden-ratio-padding-large-h: calc(var(--golden-ratio-padding-large-v) * var(--golden-ratio));
 }
 
 /* 响应式断点调整 */

@@ -138,24 +138,41 @@ export default defineConfig({
       lg: 'var(--shadow-lg)',
       xl: 'var(--shadow-xl)',
     },
+    // 黄金分割比例相关
+    goldenRatio: {
+      value: 'var(--golden-ratio)',
+      padding: {
+        mini: {
+          v: 'var(--golden-ratio-padding-mini-v)',
+          h: 'var(--golden-ratio-padding-mini-h)',
+        },
+        small: {
+          v: 'var(--golden-ratio-padding-small-v)',
+          h: 'var(--golden-ratio-padding-small-h)',
+        },
+        medium: {
+          v: 'var(--golden-ratio-padding-medium-v)',
+          h: 'var(--golden-ratio-padding-medium-h)',
+        },
+        large: {
+          v: 'var(--golden-ratio-padding-large-v)',
+          h: 'var(--golden-ratio-padding-large-h)',
+        },
+      },
+    },
   },
 
   // 添加快捷方式
   shortcuts: {
     // 标题
-    'h1': 'text-h1 font-bold leading-tight',
-    'h2': 'text-h2 font-bold leading-tight',
-    'h3': 'text-h3 font-medium leading-tight',
-    'h4': 'text-h4 font-medium leading-base',
-    'h5': 'text-h5 font-medium leading-base',
-    'h6': 'text-h6 font-medium leading-base',
-
-    // 按钮
-    'btn': 'px-4 py-2 rounded-md transition-all duration-200',
-    'btn-primary': 'bg-primary text-white hover:bg-primary-dark',
-    'btn-secondary': 'bg-secondary text-white hover:bg-secondary-dark',
+    h1: 'text-h1 font-bold leading-tight',
+    h2: 'text-h2 font-bold leading-tight',
+    h3: 'text-h3 font-medium leading-tight',
+    h4: 'text-h4 font-medium leading-base',
+    h5: 'text-h5 font-medium leading-base',
+    h6: 'text-h6 font-medium leading-base',
 
     // 卡片
-    'card': 'bg-white rounded-lg shadow-sm p-4',
+    card: 'bg-white rounded-lg shadow-sm p-4',
   },
 })

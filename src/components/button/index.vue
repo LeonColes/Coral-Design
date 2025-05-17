@@ -9,7 +9,7 @@ type ButtonSize = 'mini' | 'small' | 'medium' | 'large'
 /**
  * 按钮类型
  */
-type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger'
+type ButtonType = 'primary' | 'success' | 'warning' | 'danger'
 
 /**
  * 按钮形状
@@ -19,7 +19,7 @@ type ButtonShape = 'square' | 'round' | 'circle'
 /**
  * 按钮变体
  */
-type ButtonVariant = 'filled' | 'outlined' | 'text' | 'elevated'
+type ButtonVariant = 'outlined' | 'text' | 'elevated'
 
 // 定义组件属性
 const props = defineProps({
@@ -28,7 +28,7 @@ const props = defineProps({
    */
   type: {
     type: String as () => ButtonType,
-    default: 'default',
+    default: 'primary',
   },
 
   /**
@@ -52,7 +52,7 @@ const props = defineProps({
    */
   variant: {
     type: String as () => ButtonVariant,
-    default: 'filled',
+    default: undefined, // 不设置变体时为默认填充样式
   },
 
   /**
@@ -107,41 +107,59 @@ const props = defineProps({
 // 定义事件
 const emit = defineEmits<{
   (e: 'click', event: Event): void
-  (e: 'loadingChange', loading: boolean): void
 }>()
 
 // 计算按钮类名
 const buttonClass = computed(() => {
   const { type, size, shape, variant, disabled, loading, block, customClass } = props
 
-  return [
+  const classes = [
     'coral-button',
     `coral-button--${type}`,
     `coral-button--${size}`,
     `coral-button--${shape}`,
-    `coral-button--${variant}`,
-    {
-      'coral-button--disabled': disabled,
-      'coral-button--loading': loading,
-      'coral-button--block': block,
-    },
-    customClass,
   ]
+
+  // 只有当变体被明确指定时，才添加变体类
+  if (variant) {
+    classes.push(`coral-button--${variant}`)
+  }
+
+  // 添加状态类
+  if (disabled) {
+    classes.push('coral-button--disabled')
+  }
+
+  if (loading) {
+    classes.push('coral-button--loading')
+  }
+
+  if (block) {
+    classes.push('coral-button--block')
+  }
+
+  // 添加自定义类名
+  if (customClass) {
+    classes.push(customClass)
+  }
+
+  return classes
 })
 
 // 处理点击事件
 function handleClick(event: Event) {
-  if (props.disabled || props.loading)
+  if (props.disabled || props.loading) {
+    event.stopPropagation()
     return
+  }
 
   emit('click', event)
 }
 </script>
 
 <template>
-  <button
+  <view
     :class="buttonClass"
-    :disabled="disabled"
     @click="handleClick"
   >
     <!-- 加载图标 -->
@@ -171,58 +189,62 @@ function handleClick(event: Event) {
       <!-- 这里可以放置图标组件 -->
       {{ icon }}
     </view>
-  </button>
+  </view>
 </template>
 
 <style>
 .coral-button {
   /* 基础样式 */
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
-  border: none;
+  padding: 0;
   outline: none;
   cursor: pointer;
   text-align: center;
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  position: relative;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.5, 1);
   overflow: hidden;
   font-weight: 500;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  /* 为触摸设备优化点击体验 */
+  touch-action: manipulation;
 }
 
-/* 尺寸变量 */
+/* 尺寸样式 */
 .coral-button--mini {
-  height: 28px;
+  height: 26px; /* 26px */
   font-size: 12px;
   border-radius: 4px;
+  padding: var(--golden-ratio-padding-mini-v) var(--golden-ratio-padding-mini-h); /* 黄金分割比例约 1:1.618 */
 }
 
 .coral-button--small {
-  height: 32px;
-  font-size: 13px;
+  height: 32px; /* 32px */
+  font-size: 14px;
   border-radius: 6px;
+  padding: var(--golden-ratio-padding-small-v) var(--golden-ratio-padding-small-h); /* 黄金分割比例约 1:1.618 */
 }
 
 .coral-button--medium {
-  height: 40px;
-  font-size: 14px;
+  height: 40px; /* 40px */
+  font-size: 16px;
   border-radius: 8px;
+  padding: var(--golden-ratio-padding-medium-v) var(--golden-ratio-padding-medium-h); /* 黄金分割比例约 1:1.618 */
 }
 
 .coral-button--large {
-  height: 48px;
-  font-size: 16px;
+  height: 48px; /* 48px */
+  font-size: 18px;
   border-radius: 10px;
+  padding: var(--golden-ratio-padding-large-v) var(--golden-ratio-padding-large-h); /* 黄金分割比例约 1:1.618 */
 }
 
 /* 形状变量 */
 .coral-button--square {
   border-radius: 0;
-}
-
-.coral-button--round {
-  /* 圆角已在尺寸中定义 */
 }
 
 .coral-button--circle {
@@ -232,31 +254,8 @@ function handleClick(event: Event) {
 }
 
 /* 类型和变体组合 */
-/* Default 类型 */
-.coral-button--default.coral-button--filled {
-  background-color: #f2f3f5;
-  color: #333333;
-}
-
-.coral-button--default.coral-button--outlined {
-  background-color: transparent;
-  color: #333333;
-  border: 1px solid #e0e0e0;
-}
-
-.coral-button--default.coral-button--text {
-  background-color: transparent;
-  color: #333333;
-}
-
-.coral-button--default.coral-button--elevated {
-  background-color: #f2f3f5;
-  color: #333333;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* Primary 类型 */
-.coral-button--primary.coral-button--filled {
+/* Primary 类型 - 默认填充样式 */
+.coral-button--primary {
   background-color: var(--coral-500, #FF7E6A);
   color: white;
 }
@@ -275,11 +274,12 @@ function handleClick(event: Event) {
 .coral-button--primary.coral-button--elevated {
   background-color: var(--coral-500, #FF7E6A);
   color: white;
-  box-shadow: 0 2px 8px rgba(255, 126, 106, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 126, 106, 0.4), 0 2px 4px rgba(255, 126, 106, 0.3);
+  transform: translateY(-1px);
 }
 
-/* Success 类型 */
-.coral-button--success.coral-button--filled {
+/* Success 类型 - 默认填充样式 */
+.coral-button--success {
   background-color: var(--success, #4CAF50);
   color: white;
 }
@@ -298,11 +298,12 @@ function handleClick(event: Event) {
 .coral-button--success.coral-button--elevated {
   background-color: var(--success, #4CAF50);
   color: white;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4), 0 2px 4px rgba(76, 175, 80, 0.3);
+  transform: translateY(-1px);
 }
 
-/* Warning 类型 */
-.coral-button--warning.coral-button--filled {
+/* Warning 类型 - 默认填充样式 */
+.coral-button--warning {
   background-color: var(--warning, #FF9800);
   color: white;
 }
@@ -321,11 +322,12 @@ function handleClick(event: Event) {
 .coral-button--warning.coral-button--elevated {
   background-color: var(--warning, #FF9800);
   color: white;
-  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4), 0 2px 4px rgba(255, 152, 0, 0.3);
+  transform: translateY(-1px);
 }
 
-/* Danger 类型 */
-.coral-button--danger.coral-button--filled {
+/* Danger 类型 - 默认填充样式 */
+.coral-button--danger {
   background-color: var(--error, #F44336);
   color: white;
 }
@@ -344,17 +346,18 @@ function handleClick(event: Event) {
 .coral-button--danger.coral-button--elevated {
   background-color: var(--error, #F44336);
   color: white;
-  box-shadow: 0 2px 8px rgba(244, 67, 54, 0.2);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4), 0 2px 4px rgba(244, 67, 54, 0.3);
+  transform: translateY(-1px);
 }
 
 /* 状态样式 */
 .coral-button--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  opacity: 0.5 !important;
+  pointer-events: none !important;
 }
 
 .coral-button--loading {
-  cursor: default;
+  pointer-events: none;
 }
 
 .coral-button--block {
@@ -406,12 +409,15 @@ function handleClick(event: Event) {
 }
 
 /* 按钮交互效果 */
-.coral-button:not(.coral-button--disabled):not(.coral-button--loading):hover {
-  opacity: 0.9;
-}
-
 .coral-button:not(.coral-button--disabled):not(.coral-button--loading):active {
   opacity: 0.8;
   transform: translateY(1px);
+}
+
+/* 触摸屏交互 */
+@media (hover: hover) {
+  .coral-button:not(.coral-button--disabled):not(.coral-button--loading):hover {
+    opacity: 0.9;
+  }
 }
 </style>

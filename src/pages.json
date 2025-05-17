@@ -6,7 +6,11 @@
     },
     {
       "path": "pages/button/index",
-      "type": "page"
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "按钮组件",
+        "navigationStyle": "custom"
+      }
     },
     {
       "path": "pages/colors/index",

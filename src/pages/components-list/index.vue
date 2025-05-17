@@ -24,12 +24,19 @@ function goToComponent(path: string | undefined, status: string) {
   }
 
   uni.navigateTo({
-    url: `./${path}`,
+    url: `../${path}/index`,
   })
 }
 
 // 目前的组件列表
 const componentList = [
+  {
+    name: '设计系统',
+    items: [
+      { title: '颜色 Colors', desc: '系统配色方案', icon: 'colors', status: 'completed', path: 'colors' },
+      { title: '排版 Typography', desc: '文本排版样式', icon: 'typography', status: 'completed', path: 'typography' },
+    ] as ComponentItem[],
+  },
   {
     name: '基础组件',
     items: [

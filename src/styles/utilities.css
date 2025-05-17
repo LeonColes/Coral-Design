@@ -1,8 +1,137 @@
 @charset "UTF-8";
 /**
  * Coral Design 工具类
- * 功能性CSS类，用于布局、对齐、显示等
+ * 提供常用的工具类样式
  */
+
+/* 容器类 */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* 弹性布局 */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+/* 间距 */
+.gap-4 {
+  gap: var(--spacing-4);
+}
+
+.gap-8 {
+  gap: var(--spacing-8);
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+/* 文本样式 */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* 颜色类 */
+.text-primary {
+  color: var(--primary);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.text-white {
+  color: var(--white);
+}
+
+.bg-white {
+  background-color: var(--white);
+}
+
+/* 可见性 */
+.hidden {
+  display: none;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+/* 通用类 */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
 
 /* 文本处理工具类 */
 .truncate {
@@ -24,14 +153,6 @@
 /* 可见性控制 */
 .hide {
   display: none !important;
-}
-
-.invisible {
-  visibility: hidden;
-}
-
-.visible {
-  visibility: visible;
 }
 
 /* Flexbox布局 */
