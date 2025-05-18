@@ -25,9 +25,18 @@
       }
     },
     {
+      "path": "pages/icons/index",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "图标组件",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/navbar/index",
       "type": "page",
       "style": {
+        "navigationBarTitleText": "导航栏组件",
         "navigationStyle": "custom"
       }
     },

@@ -114,11 +114,11 @@ function handleBackClick() {
   emits('back-click')
 }
 
-// 对外暴露方法
+/**
+ * 对外暴露方法
+ * 刷新系统信息 - 适用于需要重新计算导航栏高度的场景
+ */
 defineExpose({
-  /**
-   * 刷新系统信息 - 适用于需要重新计算导航栏高度的场景
-   */
   getNavBarHeight,
 })
 
@@ -131,8 +131,7 @@ onMounted(() => {
 <template>
   <!-- 导航栏 -->
   <view
-    class="navbar"
-    :style="{
+    class="navbar" :style="{
       height: `${navBarHeight}px`,
       backgroundColor,
       position: fixed ? 'fixed' : 'static',
@@ -161,11 +160,7 @@ onMounted(() => {
       </view>
 
       <!-- 中间区域（标题） -->
-      <view
-        class="navbar-title"
-        :class="{ 'navbar-title--center': titleCenter }"
-        :style="{ color: titleColor }"
-      >
+      <view class="navbar-title" :class="{ 'navbar-title--center': titleCenter }" :style="{ color: titleColor }">
         <slot name="title">
           {{ title }}
         </slot>

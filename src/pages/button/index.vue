@@ -344,6 +344,72 @@ watch([selectedType, selectedSize, selectedShape, selectedVariant, isBlock], () 
             </view>
           </view>
 
+          <!-- 图标按钮展示 -->
+          <view class="demo-section">
+            <view class="section-header">
+              <text class="section-title">
+                图标按钮
+              </text>
+              <text class="section-desc">
+                按钮与图标结合使用的样式展示
+              </text>
+            </view>
+
+            <view class="icon-button-grid">
+              <view class="icon-button-group">
+                <text class="group-label">
+                  左侧图标
+                </text>
+                <view class="icon-button-row">
+                  <CoralButton
+                    v-for="size in buttonSizes"
+                    :key="size"
+                    :size="size"
+                    type="primary"
+                    icon="info.svg"
+                    icon-position="left"
+                  >
+                    {{ size }}按钮
+                  </CoralButton>
+                </view>
+              </view>
+
+              <view class="icon-button-group">
+                <text class="group-label">
+                  右侧图标
+                </text>
+                <view class="icon-button-row">
+                  <CoralButton
+                    v-for="size in buttonSizes"
+                    :key="size"
+                    :size="size"
+                    type="primary"
+                    icon="info.svg"
+                    icon-position="right"
+                  >
+                    {{ size }}按钮
+                  </CoralButton>
+                </view>
+              </view>
+
+              <view class="icon-button-group">
+                <text class="group-label">
+                  仅图标 (circle)
+                </text>
+                <view class="icon-button-row">
+                  <CoralButton
+                    v-for="size in buttonSizes"
+                    :key="size"
+                    :size="size"
+                    type="primary"
+                    shape="circle"
+                    icon="info.svg"
+                  />
+                </view>
+              </view>
+            </view>
+          </view>
+
           <!-- 类型与变体组合演示 -->
           <view class="demo-section">
             <view class="section-header">
@@ -1524,6 +1590,31 @@ watch([selectedType, selectedSize, selectedShape, selectedVariant, isBlock], () 
 
 .switch--active .switch__handle {
   transform: translateX(20px);
+}
+
+/* 图标按钮展示样式 */
+.icon-button-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.icon-button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.group-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.icon-button-row {
+  display: flex;
+  gap: 8px;
 }
 </style>
 

@@ -8,6 +8,7 @@ interface NavigateToOptions {
        "/pages/button/index" |
        "/pages/colors/index" |
        "/pages/components-list/index" |
+       "/pages/icons/index" |
        "/pages/navbar/index" |
        "/pages/typography/index";
 }
