@@ -5,23 +5,11 @@
       "type": "home"
     },
     {
-      "path": "pages/button/index",
-      "type": "page"
-    },
-    {
       "path": "pages/colors/index",
       "type": "page"
     },
     {
-      "path": "pages/icons/index",
-      "type": "page"
-    },
-    {
       "path": "pages/index/index",
-      "type": "page"
-    },
-    {
-      "path": "pages/navbar/index",
       "type": "page"
     },
     {

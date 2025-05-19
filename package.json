@@ -117,6 +117,6 @@
     "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx,vue}": "eslint --fix"
+    "*": "eslint --fix"
   }
 }
