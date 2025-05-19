@@ -395,12 +395,3 @@ const componentList = [
   }
 }
 </style>
-
-<route lang="json">
-{
-  "style": {
-    "navigationBarTitleText": "组件库",
-    "navigationStyle": "custom"
-  }
-}
-</route>

@@ -6,11 +6,7 @@
     },
     {
       "path": "pages/button/index",
-      "type": "page",
-      "style": {
-        "navigationBarTitleText": "按钮组件",
-        "navigationStyle": "custom"
-      }
+      "type": "page"
     },
     {
       "path": "pages/colors/index",
@@ -18,27 +14,15 @@
     },
     {
       "path": "pages/icons/index",
-      "type": "page",
-      "style": {
-        "navigationBarTitleText": "图标组件",
-        "navigationStyle": "custom"
-      }
+      "type": "page"
     },
     {
       "path": "pages/index/index",
-      "type": "page",
-      "style": {
-        "navigationBarTitleText": "组件库",
-        "navigationStyle": "custom"
-      }
+      "type": "page"
     },
     {
       "path": "pages/navbar/index",
-      "type": "page",
-      "style": {
-        "navigationBarTitleText": "导航栏组件",
-        "navigationStyle": "custom"
-      }
+      "type": "page"
     },
     {
       "path": "pages/typography/index",

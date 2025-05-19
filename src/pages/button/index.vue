@@ -1617,12 +1617,3 @@ watch([selectedType, selectedSize, selectedShape, selectedVariant, isBlock], () 
   gap: 8px;
 }
 </style>
-
-<route lang="json">
-{
-  "style": {
-    "navigationBarTitleText": "按钮组件",
-    "navigationStyle": "custom"
-  }
-}
-</route>

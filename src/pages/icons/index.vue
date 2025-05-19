@@ -1085,12 +1085,3 @@ watch([selectedIcon, selectedSize, customWidth, customHeight, selectedColor, use
   }
 }
 </style>
-
-<route lang="json">
-{
-  "style": {
-    "navigationBarTitleText": "图标组件",
-    "navigationStyle": "custom"
-  }
-}
-</route>

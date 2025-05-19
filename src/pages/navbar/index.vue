@@ -1188,12 +1188,3 @@ function onBackClick() {
   color: #606266;
 }
 </style>
-
-<route lang="json">
-{
-  "style": {
-    "navigationBarTitleText": "导航栏组件",
-    "navigationStyle": "custom"
-  }
-}
-</route>
