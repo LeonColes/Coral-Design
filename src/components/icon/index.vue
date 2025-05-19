@@ -57,7 +57,7 @@ const iconSrc = computed(() => {
   }
   if (name) {
     // 使用内置图标
-    return `/static/icons/${name}`
+    return `/static/icons/${name}.svg`
   }
   return ''
 })

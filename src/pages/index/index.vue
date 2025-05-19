@@ -39,7 +39,7 @@ onMounted(() => {
 
 // 组件图标路径计算
 const getIconPath = computed(() => (icon: string) => {
-  return `/static/component-icons/${icon}.png`
+  return `/static/icons/${icon}.png`
 })
 
 // 预设主题颜色
@@ -120,7 +120,9 @@ const componentList = [
       { title: '按钮 Button', desc: '多样式按钮组件', icon: 'button', status: 'completed', path: 'button' },
       { title: '图标 Icon', desc: '图标集合', icon: 'icon', status: 'completed', path: 'icons' },
       { title: '导航栏 Navbar', desc: '页面顶部导航', icon: 'navbar', status: 'completed', path: 'navbar' },
-      { title: '文本 Text', desc: '文本显示组件', icon: 'text', status: 'planning' },
+      { title: '卡片 Card', desc: '内容容器组件', icon: 'card', status: 'completed', path: 'card' },
+      { title: '文本 Text', desc: '文本显示组件', icon: 'text', status: 'completed', path: 'text' },
+      { title: '表格 Table', desc: '数据表格组件', icon: 'table', status: 'completed', path: 'table' },
     ] as ComponentItem[],
   },
   {
@@ -128,9 +130,9 @@ const componentList = [
     items: [
       { title: '输入框 Input', desc: '接收用户输入', icon: 'input', status: 'planning' },
       { title: '选择器 Select', desc: '下拉选择组件', icon: 'select', status: 'planning' },
-      { title: '单选框 Radio', desc: '单选组件', icon: 'radio', status: 'planning' },
-      { title: '复选框 Checkbox', desc: '多选组件', icon: 'checkbox', status: 'planning' },
-      { title: '开关 Switch', desc: '状态切换', icon: 'switch', status: 'planning' },
+      { title: '单选框 Radio', desc: '单选组件', icon: 'radio', status: 'completed', path: 'radio' },
+      { title: '复选框 Checkbox', desc: '多选组件', icon: 'checkbox', status: 'completed', path: 'checkbox' },
+      { title: '开关 Switch', desc: '状态切换', icon: 'switch', status: 'completed', path: 'switch' },
     ] as ComponentItem[],
   },
   {
@@ -283,41 +285,161 @@ const componentList = [
               v-for="(component, componentIndex) in category.items"
               :key="componentIndex"
               class="component-card"
-              :class="{ 'component-card--completed': component.status === 'completed' }"
+              :class="{
+                'component-card--completed': component.status === 'completed',
+                'component-card--planning': component.status === 'planning',
+              }"
               :style="{ animationDelay: `${(categoryIndex * 0.05) + ((componentIndex + 1) * 0.03)}s` }"
               @click="goToComponent(component.path, component.status)"
             >
-              <!-- 组件图标 -->
-              <view class="component-icon" :class="component.status">
-                <image
-                  class="icon-image"
-                  :src="getIconPath(component.icon)"
-                  mode="aspectFit"
-                />
+              <view class="component-main">
+                <!-- 组件图标 -->
+                <view class="component-icon" :class="component.status">
+                  <image
+                    class="icon-image"
+                    :src="getIconPath(component.icon)"
+                    mode="aspectFit"
+                  />
+                </view>
+
+                <view class="component-content">
+                  <view class="component-info">
+                    <text class="component-title">
+                      {{ component.title }}
+                    </text>
+                    <text class="component-desc">
+                      {{ component.desc }}
+                    </text>
+                  </view>
+                  <view class="component-status" :class="component.status">
+                    {{ component.status === 'planning' ? '规划中' : '已完成' }}
+                  </view>
+                </view>
               </view>
 
-              <view class="component-content">
-                <view class="component-info">
-                  <text class="component-title">
-                    {{ component.title }}
-                  </text>
-                  <text class="component-desc">
-                    {{ component.desc }}
-                  </text>
-                </view>
-                <view class="component-status" :class="component.status">
-                  {{ component.status === 'planning' ? '规划中' : '已完成' }}
-                </view>
+              <!-- 组件预览区域 (仅展示已完成的组件) -->
+              <view v-if="component.status === 'completed'" class="component-preview">
+                <!-- 按钮组件预览 -->
+                <template v-if="component.path === 'button'">
+                  <view class="preview-buttons">
+                    <view class="preview-button preview-button--primary">
+                      主要按钮
+                    </view>
+                    <view class="preview-button preview-button--default">
+                      默认按钮
+                    </view>
+                  </view>
+                </template>
+
+                <!-- 卡片组件预览 -->
+                <template v-else-if="component.path === 'card'">
+                  <view class="preview-card">
+                    <view class="preview-card-header">
+                      卡片标题
+                    </view>
+                    <view class="preview-card-content">
+                      卡片内容区域
+                    </view>
+                    <view class="preview-card-footer">
+                      <view class="preview-card-btn">
+                        操作按钮
+                      </view>
+                    </view>
+                  </view>
+                </template>
+
+                <!-- 表单组件预览 -->
+                <template v-else-if="component.path === 'form'">
+                  <view class="preview-form">
+                    <view class="preview-form-group">
+                      <view class="preview-radio" />
+                      <view class="preview-checkbox" />
+                    </view>
+                    <view class="preview-switch-wrapper">
+                      <view class="preview-switch" />
+                    </view>
+                  </view>
+                </template>
+
+                <!-- 颜色组件预览 -->
+                <template v-else-if="component.path === 'colors'">
+                  <view class="preview-colors">
+                    <view class="preview-color" style="background-color: var(--primary)" />
+                    <view class="preview-color" style="background-color: var(--secondary)" />
+                    <view class="preview-color" style="background-color: var(--success)" />
+                    <view class="preview-color" style="background-color: var(--warning)" />
+                    <view class="preview-color" style="background-color: var(--error)" />
+                  </view>
+                </template>
+
+                <!-- 图标组件预览 -->
+                <template v-else-if="component.path === 'icons'">
+                  <view class="preview-icons">
+                    <view class="preview-icon" />
+                    <view class="preview-icon" />
+                    <view class="preview-icon" />
+                    <view class="preview-icon" />
+                  </view>
+                </template>
+
+                <!-- 导航栏组件预览 -->
+                <template v-else-if="component.path === 'navbar'">
+                  <view class="preview-navbar">
+                    <view class="preview-navbar-left" />
+                    <view class="preview-navbar-title" />
+                    <view class="preview-navbar-right" />
+                  </view>
+                </template>
+
+                <!-- 排版组件预览 -->
+                <template v-else-if="component.path === 'typography'">
+                  <view class="preview-typography">
+                    <view class="preview-text-lg" />
+                    <view class="preview-text-md" />
+                    <view class="preview-text-sm" />
+                  </view>
+                </template>
+
+                <!-- 主题组件预览 -->
+                <template v-else-if="component.path === 'theme'">
+                  <view class="preview-theme">
+                    <view class="preview-theme-light" />
+                    <view class="preview-theme-dark" />
+                  </view>
+                </template>
               </view>
             </view>
           </view>
         </view>
       </view>
     </view>
+
+    <!-- 页脚 -->
+    <view class="footer">
+      <view class="footer-content">
+        <view class="footer-logo">
+          Coral Design
+        </view>
+        <view class="footer-links">
+          <text class="footer-link">
+            关于我们
+          </text>
+          <text class="footer-link">
+            开发文档
+          </text>
+          <text class="footer-link">
+            联系方式
+          </text>
+        </view>
+        <view class="footer-copyright">
+          © {{ new Date().getFullYear() }} Coral Design. All rights reserved.
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
-<style lang="css">
+<style>
 .components-page {
   min-height: 100vh;
   background-color: var(--bg-page);
@@ -328,6 +450,9 @@ const componentList = [
 /* 页头样式 */
 .page-header {
   padding: 24px 16px;
+  position: relative;
+  background-image: linear-gradient(to right, rgba(255, 126, 106, 0.05), rgba(255, 126, 106, 0.1));
+  border-bottom: 1px solid var(--divider);
 }
 
 .navbar {
@@ -490,6 +615,7 @@ const componentList = [
   background-color: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 15px;
+  box-shadow: var(--shadow-md);
 }
 
 .color-picker, .radius-picker {
@@ -629,13 +755,19 @@ const componentList = [
   border: 1px solid var(--border-base);
   cursor: pointer;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   opacity: 0;
   animation: slideUp 0.5s ease forwards;
+  transition: all 0.3s ease;
 }
 
 .component-card--completed {
   border-left: 3px solid var(--primary);
+}
+
+.component-card--planning {
+  border-left: 3px solid var(--gray-500);
+  opacity: 0.8;
 }
 
 .component-card:hover {
@@ -648,6 +780,12 @@ const componentList = [
   transform: scale(0.98);
 }
 
+.component-main {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
 .component-icon {
   width: 48px;
   height: 48px;
@@ -658,6 +796,7 @@ const componentList = [
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 126, 106, 0.1);
+  flex-shrink: 0;
 }
 
 .component-icon.planning {
@@ -715,6 +854,297 @@ const componentList = [
   background-color: var(--primary);
 }
 
+/* 组件预览样式 */
+.component-preview {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-base);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 预览 - 按钮 */
+.preview-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.preview-button {
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+}
+
+.preview-button--primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.preview-button--default {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-base);
+  color: var(--text-primary);
+}
+
+/* 预览 - 卡片 */
+.preview-card {
+  width: 100%;
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.preview-card-header {
+  padding: 8px;
+  font-size: 12px;
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-base);
+  font-weight: 500;
+}
+
+.preview-card-content {
+  padding: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.preview-card-footer {
+  padding: 8px;
+  border-top: 1px solid var(--border-base);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.preview-card-btn {
+  font-size: 11px;
+  padding: 4px 8px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: var(--radius-sm);
+}
+
+/* 预览 - 表单 */
+.preview-form {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-form-group {
+  display: flex;
+  gap: 16px;
+}
+
+.preview-radio {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--primary);
+  position: relative;
+}
+
+.preview-radio::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.preview-checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background-color: var(--primary);
+  position: relative;
+}
+
+.preview-checkbox::after {
+  content: '';
+  width: 8px;
+  height: 4px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.preview-switch-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.preview-switch {
+  width: 36px;
+  height: 18px;
+  border-radius: 10px;
+  background-color: var(--primary);
+  position: relative;
+}
+
+.preview-switch::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+/* 预览 - 颜色 */
+.preview-colors {
+  display: flex;
+  gap: 8px;
+}
+
+.preview-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+/* 预览 - 图标 */
+.preview-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.preview-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background-color: var(--text-secondary);
+}
+
+/* 预览 - 导航栏 */
+.preview-navbar {
+  width: 100%;
+  height: 20px;
+  background-color: var(--bg-card);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  justify-content: space-between;
+  border: 1px solid var(--border-base);
+}
+
+.preview-navbar-left {
+  width: 12px;
+  height: 8px;
+  background-color: var(--text-secondary);
+}
+
+.preview-navbar-title {
+  width: 60px;
+  height: 6px;
+  background-color: var(--text-secondary);
+}
+
+.preview-navbar-right {
+  width: 12px;
+  height: 8px;
+  background-color: var(--text-secondary);
+}
+
+/* 预览 - 排版 */
+.preview-typography {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.preview-text-lg {
+  height: 10px;
+  background-color: var(--text-primary);
+  width: 80%;
+  border-radius: 2px;
+}
+
+.preview-text-md {
+  height: 8px;
+  background-color: var(--text-secondary);
+  width: 60%;
+  border-radius: 2px;
+}
+
+.preview-text-sm {
+  height: 6px;
+  background-color: var(--text-hint);
+  width: 40%;
+  border-radius: 2px;
+}
+
+/* 预览 - 主题 */
+.preview-theme {
+  display: flex;
+  gap: 8px;
+}
+
+.preview-theme-light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--white);
+  border: 1px solid var(--border-base);
+}
+
+.preview-theme-dark {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #333;
+}
+
+/* 页脚 */
+.footer {
+  background-color: var(--bg-card);
+  padding: 24px 16px;
+  border-top: 1px solid var(--divider);
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.footer-logo {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-link {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.footer-copyright {
+  font-size: 12px;
+  color: var(--text-hint);
+}
+
 /* 动画效果 */
 @keyframes fadeIn {
   from {
@@ -739,10 +1169,98 @@ const componentList = [
 /* 响应式调整 */
 @media (min-width: 768px) {
   .page-header,
-  .content {
+  .content,
+  .footer-content {
     padding: 40px 32px;
     max-width: 1200px;
     margin: 0 auto;
+  }
+
+  .footer {
+    padding: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .components {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .component-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .theme-section {
+    margin-bottom: 40px;
+  }
+
+  .theme-customizer {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .color-picker {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .radius-picker {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    margin-top: 12px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .page-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar {
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .theme-options {
+    gap: 24px;
+  }
+
+  .theme-option {
+    width: 100px;
+    padding: 15px;
+  }
+
+  .theme-preview {
+    width: 70px;
+    height: 70px;
+  }
+
+  .component-list {
+    gap: 48px;
+  }
+
+  .category-name {
+    font-size: 22px;
+  }
+
+  .component-preview {
+    min-height: 80px;
   }
 }
 
@@ -774,5 +1292,19 @@ const componentList = [
     width: 30%;
     padding: 5px;
   }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
 }
 </style>
+
+<route lang="json">
+{
+  "style": {
+    "navigationBarTitleText": "Coral Design"
+  }
+}
+</route>
