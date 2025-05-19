@@ -96,17 +96,39 @@ export function useThemeStore() {
 
     // #ifdef APP-PLUS || MP
     // 小程序和APP通过设置全局样式变量处理
-    // 这里可以根据不同平台的实现方式进行调整
-    const pages = getCurrentPages()
-    const page = pages[pages.length - 1]
-    if (page && page.$vm) {
-      // 动态设置当前页面的样式类
-      if (isDark.value) {
-        page.$vm.$el.classList.add('theme-dark')
+    try {
+      const pages = getCurrentPages()
+      const page = pages[pages.length - 1]
+
+      // 使用小程序特有的方法设置主题
+      if (page) {
+        // 尝试设置页面主题类（如果支持）
+        try {
+          if (typeof page.setData === 'function') {
+            page.setData({
+              themeClass: isDark.value ? 'theme-dark' : '',
+            })
+          }
+        }
+        catch (err) {
+          console.error('Failed to set page theme class:', err)
+        }
+
+        // 设置导航栏颜色以反映主题
+        setTimeout(() => {
+          uni.setNavigationBarColor({
+            frontColor: isDark.value ? '#ffffff' : '#000000',
+            backgroundColor: isDark.value ? '#181818' : '#ffffff',
+            animation: {
+              duration: 300,
+              timingFunc: 'easeIn',
+            },
+          })
+        }, 0)
       }
-      else {
-        page.$vm.$el.classList.remove('theme-dark')
-      }
+    }
+    catch (e) {
+      console.error('Failed to apply theme in MP/APP environment:', e)
     }
     // #endif
   }
