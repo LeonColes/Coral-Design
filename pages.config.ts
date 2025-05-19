@@ -9,7 +9,6 @@ export default defineUniPages({
     backgroundTextStyle: '@bgTxtStyle',
     navigationBarBackgroundColor: '#000000',
     navigationBarTextStyle: '@navTxtStyle',
-    navigationBarTitleText: 'CoralDesign',
     navigationStyle: 'custom',
   },
   // tabBar: {

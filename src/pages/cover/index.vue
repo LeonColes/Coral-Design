@@ -4,7 +4,7 @@ import { onMounted, ref } from 'vue'
 // 导航函数
 function jumpToComponents() {
   uni.navigateTo({
-    url: '/pages/components-list/index',
+    url: '/pages/index/index',
   })
 }
 
@@ -121,7 +121,7 @@ onMounted(() => {
   </view>
 </template>
 
-<style lang="css">
+<style lang="css" scoped>
 .global-reset {
   margin: 0;
   padding: 0;

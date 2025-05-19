@@ -39,8 +39,8 @@ const codeExample = ref(`<NavBar
   :title-center="true"
   :show-back="true"
   :border="true"
-  backgroundColor="#FF7E6A"
-  titleColor="white"
+  background-color="#FF7E6A"
+  title-color="white"
   :fixed="true"
 />`)
 
@@ -51,10 +51,15 @@ function updateCodeExample() {
   :title-center="${titleCenter.value}"
   :show-back="${showBack.value}"
   :border="${showBorder.value}"
-  backgroundColor="${backgroundColor.value}"
-  titleColor="${titleColor.value}"
+  background-color="${backgroundColor.value}"
+  title-color="${titleColor.value}"
   :fixed="${fixed.value}"
-/>`
+>
+  <!-- 可以添加自定义内容 -->
+  <!-- <view slot="left">左侧内容</view> -->
+  <!-- <view slot="title">自定义标题</view> -->
+  <!-- <view slot="right">右侧内容</view> -->
+</NavBar>`
 }
 
 // 监听所有选择变化，更新示例代码
@@ -106,6 +111,8 @@ function onBackClick() {
       title="导航栏组件"
       :title-center="true"
       :show-back="true"
+      background-color="#FF7E6A"
+      title-color="white"
       @back-click="goBack"
     />
 
@@ -134,22 +141,17 @@ function onBackClick() {
 
         <view v-if="showPreview" class="preview-area">
           <view class="navbar-preview-container" :style="{ backgroundColor }">
-            <view class="navbar-preview" :class="{ 'navbar-preview--border': showBorder }">
-              <view v-if="showBack" class="navbar-back" @click="onBackClick">
-                <text class="back-icon" :style="{ borderColor: titleColor }" />
-                <text class="back-text" :style="{ color: titleColor }">
-                  返回
-                </text>
-              </view>
-
-              <view
-                class="navbar-title"
-                :class="{ 'navbar-title--center': titleCenter }"
-                :style="{ color: titleColor }"
-              >
-                {{ title }}
-              </view>
-            </view>
+            <NavBar
+              :title="title"
+              :title-center="titleCenter"
+              :show-back="showBack"
+              :border="showBorder"
+              :background-color="backgroundColor"
+              :title-color="titleColor"
+              :fixed="false"
+              :show-block="false"
+              @back-click="onBackClick"
+            />
           </view>
         </view>
       </view>
@@ -511,17 +513,16 @@ function onBackClick() {
           </view>
 
           <view class="demo-block">
-            <view class="demo-navbar" style="background-color: #FF7E6A;">
-              <view class="demo-back">
-                <text class="demo-back-icon" />
-                <text class="demo-back-text">
-                  返回
-                </text>
-              </view>
-              <view class="demo-title">
-                标题文字
-              </view>
-            </view>
+            <NavBar
+              title="标题文字"
+              :title-center="true"
+              :show-back="true"
+              background-color="#FF7E6A"
+              title-color="white"
+              :fixed="false"
+              :show-block="false"
+              @back-click="onBackClick"
+            />
           </view>
         </view>
 
@@ -536,45 +537,53 @@ function onBackClick() {
           </view>
 
           <view class="demo-block">
-            <view class="demo-navbar" style="background-color: #ffffff; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-              <view class="demo-custom-left">
-                <text class="demo-icon">
-                  ①
-                </text>
-              </view>
-              <view class="demo-title demo-title-dark">
-                自定义导航栏
-              </view>
-              <view class="demo-custom-right">
-                <text class="demo-icon">
-                  ②
-                </text>
-                <text class="demo-icon" style="margin-left: 16px;">
-                  ③
-                </text>
-              </view>
-            </view>
+            <NavBar
+              title="自定义导航栏"
+              :title-center="true"
+              background-color="#ffffff"
+              title-color="#333"
+              :fixed="false"
+              :show-block="false"
+            >
+              <template #left>
+                <view>
+                  <text class="demo-icon">
+                    ①
+                  </text>
+                </view>
+              </template>
+              <template #right>
+                <view>
+                  <text class="demo-icon">
+                    ②
+                  </text>
+                  <text class="demo-icon" style="margin-left: 16px;">
+                    ③
+                  </text>
+                </view>
+              </template>
+            </NavBar>
           </view>
 
           <view class="code-block" style="margin-top: 16px;">
             <text class="code-content">
               &lt;NavBar title="导航栏"&gt;
-              &lt;template #left&gt;
+              &lt;view slot="left"&gt;
               &lt;view class="custom-left"&gt;
               &lt;text class="icon"&gt;①&lt;/text&gt;
               &lt;/view&gt;
-              &lt;/template&gt;
+              &lt;/view&gt;
 
-              &lt;template #title&gt;
+              &lt;view slot="title"&gt;
               &lt;text class="custom-title"&gt;自定义标题&lt;/text&gt;
-              &lt;/template&gt;
+              &lt;/view&gt;
 
-              &lt;template #right&gt;
+              &lt;view slot="right"&gt;
               &lt;view class="custom-right"&gt;
               &lt;text class="icon"&gt;②&lt;/text&gt;
               &lt;text class="icon"&gt;③&lt;/text&gt;
               &lt;/view&gt;
-              &lt;/template&gt;
+              &lt;/view&gt;
               &lt;/NavBar&gt;
             </text>
           </view>
@@ -631,23 +640,31 @@ function onBackClick() {
           </view>
 
           <view class="navbar-examples">
-            <view class="demo-navbar" style="background-color: #FF7E6A;">
-              <view class="demo-title">
-                珊瑚色导航栏
-              </view>
-            </view>
+            <NavBar
+              title="珊瑚色导航栏"
+              background-color="#FF7E6A"
+              title-color="white"
+              :fixed="false"
+              :show-block="false"
+            />
 
-            <view class="demo-navbar" style="background-color: #409EFF; margin-top: 16px;">
-              <view class="demo-title">
-                蓝色导航栏
-              </view>
-            </view>
+            <NavBar
+              title="蓝色导航栏"
+              background-color="#409EFF"
+              title-color="white"
+              :fixed="false"
+              :show-block="false"
+              style="margin-top: 16px;"
+            />
 
-            <view class="demo-navbar" style="background-color: #67C23A; margin-top: 16px;">
-              <view class="demo-title">
-                绿色导航栏
-              </view>
-            </view>
+            <NavBar
+              title="绿色导航栏"
+              background-color="#67C23A"
+              title-color="white"
+              :fixed="false"
+              :show-block="false"
+              style="margin-top: 16px;"
+            />
           </view>
         </view>
       </view>

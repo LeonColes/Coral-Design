@@ -87,8 +87,9 @@ function getNavBarHeight() {
     // 计算导航栏高度：状态栏 + 内容区
     navBarHeight.value = (top - sysStatusBarHeight) * 2 + height + sysStatusBarHeight
   }
-  catch {
+  catch (err) {
     // 获取失败时使用动态计算的方式
+    console.error(err)
     contentHeight.value = Math.round(windowWidth * 0.09)
     navBarHeight.value = sysStatusBarHeight + Math.round(windowWidth * 0.11)
   }
@@ -149,14 +150,15 @@ onMounted(() => {
     <view class="navbar-content" :style="{ height: `${contentHeight}px` }">
       <!-- 左侧区域 -->
       <view class="navbar-left">
-        <slot name="left">
-          <view v-if="showBack" class="back-button" @click="handleBackClick">
-            <view class="back-icon" :style="{ borderColor: titleColor }" />
-            <text class="back-text" :style="{ color: titleColor }">
-              返回
-            </text>
-          </view>
-        </slot>
+        <!-- 返回按钮 -->
+        <view v-if="showBack" class="back-button" @click="handleBackClick">
+          <view class="back-icon" :style="{ borderColor: titleColor }" />
+          <text class="back-text" :style="{ color: titleColor }">
+            返回
+          </text>
+        </view>
+        <!-- 左侧插槽内容 -->
+        <slot name="left" />
       </view>
 
       <!-- 中间区域（标题） -->

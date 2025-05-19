@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "path": "pages/index",
+      "path": "pages/cover/index",
       "type": "home"
     },
     {
@@ -17,18 +17,18 @@
       "type": "page"
     },
     {
-      "path": "pages/components-list/index",
-      "type": "page",
-      "style": {
-        "navigationBarTitleText": "组件库",
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/icons/index",
       "type": "page",
       "style": {
         "navigationBarTitleText": "图标组件",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "type": "page",
+      "style": {
+        "navigationBarTitleText": "组件库",
         "navigationStyle": "custom"
       }
     },
@@ -52,7 +52,6 @@
     "backgroundTextStyle": "@bgTxtStyle",
     "navigationBarBackgroundColor": "#000000",
     "navigationBarTextStyle": "@navTxtStyle",
-    "navigationBarTitleText": "CoralDesign",
     "navigationStyle": "custom"
   },
   "subPackages": []
