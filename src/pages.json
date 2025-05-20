@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "path": "pages/cover/index",
+      "path": "pages/index/index",
       "type": "home",
       "style": {
         "navigationBarTitleText": "Coral Design"
@@ -10,13 +10,6 @@
     {
       "path": "pages/colors/index",
       "type": "page"
-    },
-    {
-      "path": "pages/index/index",
-      "type": "page",
-      "style": {
-        "navigationBarTitleText": "Coral Design"
-      }
     },
     {
       "path": "pages/typography/index",
