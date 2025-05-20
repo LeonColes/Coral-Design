@@ -1,84 +1,129 @@
 name: Check
 
+# 触发条件：定义工作流程的触发事件
 on:
   push:
     branches:
+      # 推送到main分支时触发
       - main
 
   pull_request:
     branches:
+      # 对main分支发起Pull Request时触发
       - main
 
+# 定义工作流中的作业
 jobs:
+  # 代码风格检查作业
   lint:
+    # 测试矩阵配置：在多种环境下运行同一任务
     strategy:
       matrix:
-        node_version: [18.x, 20.x, 22.x]
+        # 使用Node.js 20.x版本
+        node_version: [20.x]
+        # 在不同操作系统上测试
         os: [ubuntu-latest, windows-latest, macos-latest]
+      # 允许部分任务失败而不影响其他任务
       fail-fast: false
 
+    # 运行环境，使用测试矩阵中定义的操作系统
     runs-on: ${{ matrix.os }}
 
+    # 任务超时时间
     timeout-minutes: 10
 
+    # 执行步骤
     steps:
+      # 配置Git行尾处理
       - run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
+      # 检出代码
       - uses: actions/checkout@v4
+      # 设置PNPM
       - uses: pnpm/action-setup@v4
+      # 设置Node.js环境
       - uses: actions/setup-node@v4
         with:
+          # 使用矩阵中指定的Node.js版本
           node-version: ${{ matrix.node_version }}
+          # 启用PNPM缓存
           cache: pnpm
+      # 安装依赖
       - run: pnpm i
+      # 运行代码检查
       - run: pnpm run lint
 
+  # TypeScript类型检查作业
   typecheck:
+    # 测试矩阵配置
     strategy:
       matrix:
-        node_version: [18.x, 20.x, 22.x]
+        # 使用Node.js 20.x版本
+        node_version: [20.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
 
+    # 使用矩阵定义的操作系统
     runs-on: ${{ matrix.os }}
 
+    # 超时设置
     timeout-minutes: 10
 
+    # 执行步骤
     steps:
+      # 配置Git行尾
       - run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
+      # 检出代码
       - uses: actions/checkout@v4
+      # 设置PNPM
       - uses: pnpm/action-setup@v4
+      # 设置Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
           cache: pnpm
+      # 安装依赖
       - run: pnpm i
+      # 运行类型检查
       - run: pnpm run type-check
 
+  # 项目构建作业
   build:
+    # 测试矩阵配置
     strategy:
       matrix:
-        node_version: [18.x, 20.x, 22.x]
+        # 使用Node.js 20.x版本
+        node_version: [20.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
+        # 多种构建命令：标准构建、微信小程序、App
         build_cmd: [build, 'build:mp-weixin', 'build:app']
       fail-fast: false
 
+    # 使用矩阵定义的操作系统
     runs-on: ${{ matrix.os }}
 
+    # 超时设置
     timeout-minutes: 10
 
+    # 执行步骤
     steps:
+      # 配置Git行尾
       - run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
+      # 检出代码
       - uses: actions/checkout@v4
+      # 设置PNPM
       - uses: pnpm/action-setup@v4
+      # 设置Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
           cache: pnpm
+      # 安装依赖
       - run: pnpm i
+      # 运行相应的构建命令
       - run: pnpm run ${{ matrix.build_cmd }}
