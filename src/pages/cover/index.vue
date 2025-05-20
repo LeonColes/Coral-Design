@@ -8,9 +8,6 @@ function jumpToComponents() {
   })
 }
 
-// 版权年份
-const currentYear = new Date().getFullYear()
-
 // 动画状态
 const isAnimationLoaded = ref(false)
 
@@ -75,7 +72,8 @@ onMounted(() => {
             </view>
             <view class="card-divider" />
             <text class="card-content">
-              Coral Design 采用自然界中最和谐的比例关系——黄金分割(1:1.618)作为设计基础。从按钮内边距到页面留白、从元素间距到排版构建，我们确保视觉上的和谐与平衡。这种数学上的精确与美学上的优雅融为一体，创造出直观且悦目的界面。
+              Coral Design
+              采用自然界中最和谐的比例关系——黄金分割(1:1.618)作为设计基础。从按钮内边距到页面留白、从元素间距到排版构建，我们确保视觉上的和谐与平衡。这种数学上的精确与美学上的优雅融为一体，创造出直观且悦目的界面。
             </text>
           </view>
 
@@ -111,13 +109,6 @@ onMounted(() => {
         </view>
       </view>
     </view>
-
-    <!-- 页脚 -->
-    <view class="footer">
-      <text class="copyright">
-        © {{ currentYear }} Coral Design
-      </text>
-    </view>
   </view>
 </template>
 
@@ -129,11 +120,9 @@ onMounted(() => {
 }
 
 .home-page {
-  min-height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
   background-color: #FFFFFF;
 }
 
@@ -158,9 +147,9 @@ onMounted(() => {
   right: 0;
   bottom: 0;
   background: linear-gradient(135deg,
-    #FF7B5C 0%,
-    #FF5C7F 50%,
-    #B93D6B 100%);
+      #FF7B5C 0%,
+      #FF5C7F 50%,
+      #B93D6B 100%);
   z-index: 1;
 }
 
@@ -171,8 +160,8 @@ onMounted(() => {
   right: 0;
   bottom: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
   background-size: 30px 30px;
   z-index: 2;
 }
@@ -204,7 +193,7 @@ onMounted(() => {
 .logo {
   width: 120px;
   height: 120px;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
 }
 
 .text-content {
@@ -217,7 +206,7 @@ onMounted(() => {
   font-weight: 800;
   color: white;
   letter-spacing: -0.5px;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.2);
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
 }
 
@@ -225,20 +214,20 @@ onMounted(() => {
   display: block;
   font-size: 26px;
   font-weight: 600;
-  color: rgba(255,255,255,0.95);
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: 20px;
   letter-spacing: 5px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .description {
   display: block;
   font-size: 20px;
-  color: rgba(255,255,255,0.9);
+  color: rgba(255, 255, 255, 0.9);
   max-width: 500px;
   margin: 0 auto;
   line-height: 1.6;
-  text-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 .action-area {
@@ -259,13 +248,13 @@ onMounted(() => {
   background-color: white;
   color: #E83E65;
   border: none;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .action-btn:hover,
 .action-btn:active {
   transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* 设计故事部分 */
@@ -365,20 +354,6 @@ onMounted(() => {
   color: var(--gray-700);
 }
 
-/* 页脚 */
-.footer {
-  background-color: #f7f8fa;
-  padding: 24px;
-  text-align: center;
-  margin-top: auto;
-  border-top: 1px solid var(--gray-200);
-}
-
-.copyright {
-  font-size: 14px;
-  color: var(--gray-700);
-}
-
 /* 响应式设计 */
 @media (min-width: 768px) {
   .story-grid {
@@ -457,6 +432,10 @@ onMounted(() => {
 }
 </style>
 
-<route type="home" lang="json">
-{}
+<route lang="json" type="home">
+{
+  "style": {
+    "navigationBarTitleText": "Coral Design"
+  }
+}
 </route>
