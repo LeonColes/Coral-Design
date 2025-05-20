@@ -95,37 +95,33 @@ export function useThemeStore() {
     // #endif
 
     // #ifdef APP-PLUS || MP
-    // 小程序和APP通过设置全局样式变量处理
     try {
       const pages = getCurrentPages()
       const page = pages[pages.length - 1]
 
-      // 使用小程序特有的方法设置主题
-      if (page) {
-        // 尝试设置页面主题类（如果支持）
-        try {
-          if (typeof page.setData === 'function') {
-            page.setData({
-              themeClass: isDark.value ? 'theme-dark' : '',
-            })
-          }
-        }
-        catch (err) {
-          console.error('Failed to set page theme class:', err)
-        }
-
-        // 设置导航栏颜色以反映主题
-        setTimeout(() => {
-          uni.setNavigationBarColor({
-            frontColor: isDark.value ? '#ffffff' : '#000000',
-            backgroundColor: isDark.value ? '#181818' : '#ffffff',
-            animation: {
-              duration: 300,
-              timingFunc: 'easeIn',
-            },
-          })
-        }, 0)
+      // 只在 setData 存在且为函数时调用
+      if (
+        page
+        && Object.prototype.hasOwnProperty.call(page, 'setData')
+        && typeof (page as { setData?: unknown }).setData === 'function'
+      ) {
+        // 通过类型收窄调用 setData
+        (page as { setData: (data: Record<string, unknown>) => void }).setData({
+          themeClass: isDark.value ? 'theme-dark' : '',
+        })
       }
+
+      // 设置导航栏颜色以反映主题
+      setTimeout(() => {
+        uni.setNavigationBarColor({
+          frontColor: isDark.value ? '#ffffff' : '#000000',
+          backgroundColor: isDark.value ? '#181818' : '#ffffff',
+          animation: {
+            duration: 300,
+            timingFunc: 'easeIn',
+          },
+        })
+      }, 0)
     }
     catch (e) {
       console.error('Failed to apply theme in MP/APP environment:', e)
