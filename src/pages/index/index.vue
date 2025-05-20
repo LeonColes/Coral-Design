@@ -5,15 +5,6 @@ import { computed, onMounted, ref } from 'vue'
 // 初始化主题状态
 const themeStore = useThemeStore()
 
-// 定义组件项类型
-interface ComponentItem {
-  title: string
-  desc: string
-  icon: string
-  status: 'planning' | 'completed'
-  path?: string
-}
-
 // 跳转到组件详情页
 function goToComponent(path: string | undefined, status: string) {
   if (status === 'planning' || !path) {
@@ -104,148 +95,352 @@ function toggleTheme() {
   }
 }
 
-// 目前的组件列表
-const componentList = [
+// 复制代码到剪贴板
+function copyCode() {
+  const code = 'npm install coral-design'
+  uni.setClipboardData({
+    data: code,
+    success() {
+      uni.showToast({
+        title: '安装命令已复制',
+        icon: 'success',
+      })
+    },
+  })
+}
+
+// 最近更新数据
+const recentUpdates = [
   {
-    name: '设计系统',
-    items: [
-      { title: '颜色 Colors', desc: '系统配色方案', icon: 'colors', status: 'completed', path: 'colors' },
-      { title: '排版 Typography', desc: '文本排版样式', icon: 'typography', status: 'completed', path: 'typography' },
-      { title: '主题 Theme', desc: '暗黑模式与自定义主题', icon: 'theme', status: 'completed', path: 'theme' },
-    ] as ComponentItem[],
+    date: '2025-05-20',
+    title: '发布 Coral Design v1.0.0',
+    desc: '首个稳定版本发布，包含15个常用组件',
   },
   {
-    name: '基础组件',
-    items: [
-      { title: '按钮 Button', desc: '多样式按钮组件', icon: 'button', status: 'completed', path: 'button' },
-      { title: '图标 Icon', desc: '图标集合', icon: 'icon', status: 'completed', path: 'icons' },
-      { title: '导航栏 Navbar', desc: '页面顶部导航', icon: 'navbar', status: 'completed', path: 'navbar' },
-      { title: '卡片 Card', desc: '内容容器组件', icon: 'card', status: 'completed', path: 'card' },
-      { title: '文本 Text', desc: '文本显示组件', icon: 'text', status: 'completed', path: 'text' },
-      { title: '表格 Table', desc: '数据表格组件', icon: 'table', status: 'completed', path: 'table' },
-    ] as ComponentItem[],
+    date: '2025-05-15',
+    title: '发布暗色模式支持',
+    desc: '所有组件均支持暗色模式，提供更好的夜间使用体验',
   },
   {
-    name: '表单组件',
-    items: [
-      { title: '输入框 Input', desc: '接收用户输入', icon: 'input', status: 'planning' },
-      { title: '选择器 Select', desc: '下拉选择组件', icon: 'select', status: 'planning' },
-      { title: '单选框 Radio', desc: '单选组件', icon: 'radio', status: 'completed', path: 'radio' },
-      { title: '复选框 Checkbox', desc: '多选组件', icon: 'checkbox', status: 'completed', path: 'checkbox' },
-      { title: '开关 Switch', desc: '状态切换', icon: 'switch', status: 'completed', path: 'switch' },
-    ] as ComponentItem[],
+    date: '2025-05-10',
+    title: '新增主题切换功能',
+    desc: '支持自定义主题色、边框圆角、阴影等样式',
+  },
+]
+
+// 特性数据
+const features = [
+  {
+    title: '简洁优雅',
+    icon: 'elegant',
+    description: '采用极简设计语言，提供优雅、现代的视觉体验',
   },
   {
-    name: '反馈组件',
-    items: [
-      { title: '对话框 Dialog', desc: '模态对话框', icon: 'dialog', status: 'planning' },
-      { title: '提示 Toast', desc: '轻量级反馈', icon: 'toast', status: 'planning' },
-      { title: '加载 Loading', desc: '加载状态', icon: 'loading', status: 'planning' },
-      { title: '通知 Notification', desc: '通知消息', icon: 'notification', status: 'planning' },
-    ] as ComponentItem[],
+    title: '响应式设计',
+    icon: 'responsive',
+    description: '完美适配移动端和桌面端，在各种设备上都能保持良好的显示效果',
   },
   {
-    name: '导航组件',
-    items: [
-      { title: '标签页 Tabs', desc: '内容分组切换', icon: 'tabs', status: 'planning' },
-      { title: '底部导航 TabBar', desc: '应用底部导航', icon: 'tabbar', status: 'planning' },
-      { title: '步骤条 Steps', desc: '步骤流程展示', icon: 'steps', status: 'planning' },
-    ] as ComponentItem[],
+    title: '主题定制',
+    icon: 'theme',
+    description: '支持自定义主题色、边框圆角等样式，满足个性化需求',
+  },
+  {
+    title: '易用性高',
+    icon: 'usability',
+    description: '组件API设计符合直觉，降低使用门槛，提高开发效率',
+  },
+]
+
+// 设计原则
+const designPrinciples = [
+  {
+    title: '一致性',
+    description: '相似的场景使用相似的解决方案，保持交互和视觉的一致',
+  },
+  {
+    title: '效率优先',
+    description: '设计应当减少用户的思考负担，让任务完成更轻松高效',
+  },
+  {
+    title: '可控性',
+    description: '用户应当可以自主决定交互方式和结果，增强控制感',
+  },
+  {
+    title: '包容性',
+    description: '设计应当考虑不同背景、能力的用户，提供平等的使用体验',
+  },
+]
+
+// 热门组件
+const popularComponents = [
+  {
+    id: 'button',
+    name: 'Button 按钮',
+    description: '常用的操作按钮，支持多种状态、尺寸和自定义样式',
+    path: 'button',
+  },
+  {
+    id: 'card',
+    name: 'Card 卡片',
+    description: '内容容器组件，用于信息分组显示，支持多种样式变体',
+    path: 'card',
+  },
+  {
+    id: 'switch',
+    name: 'Switch 开关',
+    description: '表示两种状态间的切换控件，常用于设置面板',
+    path: 'switch',
   },
 ]
 </script>
 
 <template>
-  <view class="components-page">
-    <!-- 页头部分 -->
-    <view class="page-header">
-      <view class="navbar">
-        <view class="logo">
-          <text class="logo-text">
-            珊瑚设计
-          </text>
-          <text class="logo-sub">
-            Coral Design
-          </text>
-        </view>
-
-        <!-- 主题切换按钮 -->
-        <view class="theme-toggle" @tap="toggleTheme">
-          <view class="toggle-icon">
-            <view v-if="themeStore.isDark.value" class="moon-icon" />
-            <view v-else class="sun-icon" />
+  <view class="home-container">
+    <!-- 英雄区 -->
+    <view class="hero-section">
+      <view class="hero-content">
+        <text class="hero-title" :class="{ 'animation-loaded': isAnimationLoaded }">
+          Coral Design
+        </text>
+        <text class="hero-subtitle" :class="{ 'animation-loaded': isAnimationLoaded }">
+          优雅、现代的跨平台组件库
+        </text>
+        <view class="hero-actions" :class="{ 'animation-loaded': isAnimationLoaded }">
+          <view class="hero-button primary" @click="goToComponent('button', 'completed')">
+            了解组件
+          </view>
+          <view class="hero-button secondary" @click="copyCode">
+            快速安装
           </view>
         </view>
       </view>
+      <view class="hero-wave">
+        <view class="wave wave1" />
+        <view class="wave wave2" />
+        <view class="wave wave3" />
+      </view>
+    </view>
 
-      <!-- 主题设置部分 -->
-      <view class="theme-section" :class="{ 'animate-in': isAnimationLoaded }">
-        <view class="section-title">
-          主题设置
-        </view>
-
-        <view class="theme-options">
-          <view
-            class="theme-option"
-            :class="{ active: themeStore.settings.value.mode === 'light' }"
-            @tap="themeStore.setTheme('light')"
-          >
-            <view class="theme-preview light-preview" />
-            <text>浅色</text>
-          </view>
-
-          <view
-            class="theme-option"
-            :class="{ active: themeStore.settings.value.mode === 'dark' }"
-            @tap="themeStore.setTheme('dark')"
-          >
-            <view class="theme-preview dark-preview" />
-            <text>深色</text>
-          </view>
-
-          <view
-            class="theme-option"
-            :class="{ active: themeStore.settings.value.mode === 'system' }"
-            @tap="themeStore.setTheme('system')"
-          >
-            <view class="theme-preview system-preview" />
-            <text>跟随系统</text>
-          </view>
-        </view>
-
-        <view class="theme-customizer">
-          <view class="color-picker">
-            <text class="picker-label">
-              主题色
+    <!-- 快速开始 -->
+    <view class="section quick-start">
+      <view class="section-header">
+        <text class="section-title">
+          快速开始
+        </text>
+        <text class="section-subtitle">
+          三步完成组件库安装和使用
+        </text>
+      </view>
+      <view class="quick-start-steps">
+        <view class="code-block">
+          <view class="code-header">
+            <text class="code-title">
+              安装
             </text>
-            <view class="color-options">
-              <view
-                v-for="color in themeColors"
-                :key="color"
-                class="color-option"
-                :style="{ backgroundColor: color }"
-                :class="{ active: themeStore.settings.value.primaryColor === color }"
-                @tap="themeStore.setPrimaryColor(color)"
-              />
-
-              <!-- 自定义颜色选择器 -->
-              <view class="color-option custom-color">
-                <input
-                  :value="themeStore.settings.value.primaryColor"
-                  @change="e => themeStore.setPrimaryColor(e.detail.value)"
-                >
-              </view>
+            <view class="copy-button" @click="copyCode">
+              复制
             </view>
           </view>
-
-          <view class="radius-picker">
-            <text class="picker-label">
-              边框圆角
+          <view class="code-content">
+            <text class="code-text">
+              npm install coral-design
             </text>
+          </view>
+        </view>
+        <view class="code-block">
+          <view class="code-header">
+            <text class="code-title">
+              引入
+            </text>
+          </view>
+          <view class="code-content">
+            <text class="code-text">
+              import CoralDesign from 'coral-design';\nimport 'coral-design/lib/style.css';
+            </text>
+          </view>
+        </view>
+        <view class="code-block">
+          <view class="code-header">
+            <text class="code-title">
+              使用
+            </text>
+          </view>
+          <view class="code-content">
+            <text class="code-text">
+              &lt;coral-button type="primary"&gt;按钮&lt;/coral-button&gt;
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 热门组件 -->
+    <view class="section popular-components">
+      <view class="section-header">
+        <text class="section-title">
+          热门组件
+        </text>
+        <text class="section-subtitle">
+          精心设计的常用组件
+        </text>
+      </view>
+      <view class="components-grid">
+        <view
+          v-for="(component, index) in popularComponents"
+          :key="index"
+          class="component-preview-card"
+          @click="goToComponent(component.path, 'completed')"
+        >
+          <view class="component-preview">
+            <!-- 这里可以放组件预览图 -->
+            <view class="component-icon">
+              <image :src="getIconPath(component.id)" mode="aspectFit" />
+            </view>
+          </view>
+          <view class="component-info">
+            <text class="component-name">
+              {{ component.name }}
+            </text>
+            <text class="component-description">
+              {{ component.description }}
+            </text>
+          </view>
+        </view>
+      </view>
+      <view class="view-all-container">
+        <view class="view-all-button" @click="goToComponent('button', 'completed')">
+          查看全部组件
+        </view>
+      </view>
+    </view>
+
+    <!-- 核心特性 -->
+    <view class="section features">
+      <view class="section-header">
+        <text class="section-title">
+          核心特性
+        </text>
+        <text class="section-subtitle">
+          为什么选择 Coral Design
+        </text>
+      </view>
+      <view class="features-grid">
+        <view v-for="(feature, index) in features" :key="index" class="feature-card">
+          <view class="feature-icon">
+            <image :src="getIconPath(feature.icon)" mode="aspectFit" />
+          </view>
+          <text class="feature-title">
+            {{ feature.title }}
+          </text>
+          <text class="feature-description">
+            {{ feature.description }}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近更新 -->
+    <view class="section recent-updates">
+      <view class="section-header">
+        <text class="section-title">
+          最近更新
+        </text>
+        <text class="section-subtitle">
+          我们一直在进步
+        </text>
+      </view>
+      <view class="timeline">
+        <view v-for="(update, index) in recentUpdates" :key="index" class="timeline-item">
+          <view class="timeline-dot" />
+          <view class="timeline-content">
+            <text class="timeline-date">
+              {{ update.date }}
+            </text>
+            <text class="timeline-title">
+              {{ update.title }}
+            </text>
+            <text class="timeline-description">
+              {{ update.desc }}
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 设计原则 -->
+    <view class="section design-principles">
+      <view class="section-header">
+        <text class="section-title">
+          设计原则
+        </text>
+        <text class="section-subtitle">
+          指导我们设计的核心理念
+        </text>
+      </view>
+      <view class="principles-grid">
+        <view v-for="(principle, index) in designPrinciples" :key="index" class="principle-card">
+          <text class="principle-title">
+            {{ principle.title }}
+          </text>
+          <text class="principle-description">
+            {{ principle.description }}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 主题定制 -->
+    <view class="section theme-customization">
+      <view class="section-header">
+        <text class="section-title">
+          主题定制
+        </text>
+        <text class="section-subtitle">
+          打造专属于你的设计系统
+        </text>
+      </view>
+      <view class="theme-controls">
+        <view class="theme-section">
+          <text class="theme-section-title">
+            主题模式
+          </text>
+          <view class="theme-toggle" @tap="toggleTheme">
+            <view class="toggle-track" :class="{ 'is-dark': themeStore.isDark.value }">
+              <view class="toggle-thumb" />
+            </view>
+            <text class="toggle-label">
+              {{ themeStore.isDark.value ? '暗色模式' : '亮色模式' }}
+            </text>
+          </view>
+        </view>
+
+        <view class="theme-section">
+          <text class="theme-section-title">
+            主题色
+          </text>
+          <view class="color-options">
+            <view
+              v-for="(color, index) in themeColors"
+              :key="index"
+              class="color-option"
+              :style="{ backgroundColor: color }"
+              :class="{ active: themeStore.settings.value.primaryColor === color }"
+              @tap="themeStore.setPrimaryColor(color)"
+            />
+          </view>
+        </view>
+
+        <view class="theme-section">
+          <text class="theme-section-title">
+            圆角
+          </text>
+          <view class="radius-slider">
             <slider
               :value="radiusValue"
               :min="0"
               :max="20"
+              :step="1"
               show-value
               @change="onRadiusChange"
             />
@@ -253,1050 +448,589 @@ const componentList = [
         </view>
       </view>
     </view>
-
-    <!-- 页面内容 -->
-    <view class="content" :class="{ 'animate-in': isAnimationLoaded }">
-      <view class="header">
-        <text class="title">
-          组件总览
-        </text>
-        <text class="subtitle">
-          基于 Coral Design 设计系统打造的精美组件库
-        </text>
-      </view>
-
-      <!-- 组件列表 -->
-      <view class="component-list">
-        <view
-          v-for="(category, categoryIndex) in componentList"
-          :key="categoryIndex"
-          class="category"
-          :style="{ animationDelay: `${categoryIndex * 0.05}s` }"
-        >
-          <view class="category-header">
-            <text class="category-name">
-              {{ category.name }}
-            </text>
-            <view class="category-line" />
-          </view>
-
-          <view class="components">
-            <view
-              v-for="(component, componentIndex) in category.items"
-              :key="componentIndex"
-              class="component-card"
-              :class="{
-                'component-card--completed': component.status === 'completed',
-                'component-card--planning': component.status === 'planning',
-              }"
-              :style="{ animationDelay: `${(categoryIndex * 0.05) + ((componentIndex + 1) * 0.03)}s` }"
-              @click="goToComponent(component.path, component.status)"
-            >
-              <view class="component-main">
-                <!-- 组件图标 -->
-                <view class="component-icon" :class="component.status">
-                  <image
-                    class="icon-image"
-                    :src="getIconPath(component.icon)"
-                    mode="aspectFit"
-                  />
-                </view>
-
-                <view class="component-content">
-                  <view class="component-info">
-                    <text class="component-title">
-                      {{ component.title }}
-                    </text>
-                    <text class="component-desc">
-                      {{ component.desc }}
-                    </text>
-                  </view>
-                  <view class="component-status" :class="component.status">
-                    {{ component.status === 'planning' ? '规划中' : '已完成' }}
-                  </view>
-                </view>
-              </view>
-
-              <!-- 组件预览区域 (仅展示已完成的组件) -->
-              <view v-if="component.status === 'completed'" class="component-preview">
-                <!-- 按钮组件预览 -->
-                <template v-if="component.path === 'button'">
-                  <view class="preview-buttons">
-                    <view class="preview-button preview-button--primary">
-                      主要按钮
-                    </view>
-                    <view class="preview-button preview-button--default">
-                      默认按钮
-                    </view>
-                  </view>
-                </template>
-
-                <!-- 卡片组件预览 -->
-                <template v-else-if="component.path === 'card'">
-                  <view class="preview-card">
-                    <view class="preview-card-header">
-                      卡片标题
-                    </view>
-                    <view class="preview-card-content">
-                      卡片内容区域
-                    </view>
-                    <view class="preview-card-footer">
-                      <view class="preview-card-btn">
-                        操作按钮
-                      </view>
-                    </view>
-                  </view>
-                </template>
-
-                <!-- 表单组件预览 -->
-                <template v-else-if="component.path === 'form'">
-                  <view class="preview-form">
-                    <view class="preview-form-group">
-                      <view class="preview-radio" />
-                      <view class="preview-checkbox" />
-                    </view>
-                    <view class="preview-switch-wrapper">
-                      <view class="preview-switch" />
-                    </view>
-                  </view>
-                </template>
-
-                <!-- 颜色组件预览 -->
-                <template v-else-if="component.path === 'colors'">
-                  <view class="preview-colors">
-                    <view class="preview-color" style="background-color: var(--primary)" />
-                    <view class="preview-color" style="background-color: var(--secondary)" />
-                    <view class="preview-color" style="background-color: var(--success)" />
-                    <view class="preview-color" style="background-color: var(--warning)" />
-                    <view class="preview-color" style="background-color: var(--error)" />
-                  </view>
-                </template>
-
-                <!-- 图标组件预览 -->
-                <template v-else-if="component.path === 'icons'">
-                  <view class="preview-icons">
-                    <view class="preview-icon" />
-                    <view class="preview-icon" />
-                    <view class="preview-icon" />
-                    <view class="preview-icon" />
-                  </view>
-                </template>
-
-                <!-- 导航栏组件预览 -->
-                <template v-else-if="component.path === 'navbar'">
-                  <view class="preview-navbar">
-                    <view class="preview-navbar-left" />
-                    <view class="preview-navbar-title" />
-                    <view class="preview-navbar-right" />
-                  </view>
-                </template>
-
-                <!-- 排版组件预览 -->
-                <template v-else-if="component.path === 'typography'">
-                  <view class="preview-typography">
-                    <view class="preview-text-lg" />
-                    <view class="preview-text-md" />
-                    <view class="preview-text-sm" />
-                  </view>
-                </template>
-
-                <!-- 主题组件预览 -->
-                <template v-else-if="component.path === 'theme'">
-                  <view class="preview-theme">
-                    <view class="preview-theme-light" />
-                    <view class="preview-theme-dark" />
-                  </view>
-                </template>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 页脚 -->
-    <view class="footer">
-      <view class="footer-content">
-        <view class="footer-logo">
-          Coral Design
-        </view>
-        <view class="footer-links">
-          <text class="footer-link">
-            关于我们
-          </text>
-          <text class="footer-link">
-            开发文档
-          </text>
-          <text class="footer-link">
-            联系方式
-          </text>
-        </view>
-        <view class="footer-copyright">
-          © {{ new Date().getFullYear() }} Coral Design. All rights reserved.
-        </view>
-      </view>
-    </view>
   </view>
 </template>
 
 <style>
-.components-page {
+.home-container {
+  width: 100%;
   min-height: 100vh;
   background-color: var(--bg-page);
+}
+
+/* 英雄区 */
+.hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  overflow: hidden;
+}
+
+.hero-content {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 20px;
+  z-index: 10;
+  max-width: 800px;
 }
 
-/* 页头样式 */
-.page-header {
-  padding: 24px 16px;
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 32px;
+  max-width: 600px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease 0.4s, transform 0.5s ease 0.4s;
+}
+
+.animation-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-button {
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-button.primary {
+  background-color: white;
+  color: var(--primary);
+}
+
+.hero-button.secondary {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-repeat: repeat-x;
+  background-position: 0 bottom;
+  transform-origin: center bottom;
+}
+
+  .wave1 {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0 0v46.29c47.79 22.2 103.59 32.17 158 28 70.36-5.37 136.33-33.31 206.8-37.5 73.84-4.36 147.54 16.88 218.2 35.26 69.27 18 138.3 24.88 209.4 13.08 36.15-6 69.85-17.84 104.45-29.34C989.49 25 1113-14.29 1200 52.47V0z" opacity=".25" fill="white"/></svg>');
+  animation: wave 25s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation-delay: -3s;
+  opacity: 0.4;
+  height: 60px;
+}
+
+.wave2 {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0 0v46.29c47.79 22.2 103.59 32.17 158 28 70.36-5.37 136.33-33.31 206.8-37.5 73.84-4.36 147.54 16.88 218.2 35.26 69.27 18 138.3 24.88 209.4 13.08 36.15-6 69.85-17.84 104.45-29.34C989.49 25 1113-14.29 1200 52.47V0z" opacity=".25" fill="white"/></svg>');
+  animation: wave 20s linear reverse infinite;
+  opacity: 0.6;
+  height: 60px;
+}
+
+.wave3 {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0 0v46.29c47.79 22.2 103.59 32.17 158 28 70.36-5.37 136.33-33.31 206.8-37.5 73.84-4.36 147.54 16.88 218.2 35.26 69.27 18 138.3 24.88 209.4 13.08 36.15-6 69.85-17.84 104.45-29.34C989.49 25 1113-14.29 1200 52.47V0z" opacity=".25" fill="white"/></svg>');
+  animation: wave 15s linear infinite;
+  animation-delay: -1s;
+  opacity: 0.8;
+  height: 60px;
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(0) translateZ(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(-25%) translateZ(0) scaleY(0.8);
+  }
+  100% {
+    transform: translateX(-50%) translateZ(0) scaleY(1);
+  }
+}
+
+/* 通用部分样式 */
+.section {
+  padding: 64px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
   position: relative;
-  background-image: linear-gradient(to right, rgba(255, 126, 106, 0.05), rgba(255, 126, 106, 0.1));
-  border-bottom: 1px solid var(--divider);
+  display: inline-block;
 }
 
-.navbar {
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 30%;
+  right: 30%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-light), var(--primary));
+  border-radius: 2px;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+/* 快速开始部分 */
+.quick-start-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.code-block {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.code-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  padding: 12px 16px;
+  background-color: var(--bg-hover);
+  border-bottom: 1px solid var(--border-base);
 }
 
-.logo {
-  display: flex;
-  flex-direction: column;
-}
-
-.logo-text {
-  font-size: 24px;
+.code-title {
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
 }
 
-.logo-sub {
-  font-size: 14px;
+.copy-button {
+  font-size: 12px;
   color: var(--primary);
+  padding: 4px 8px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.code-content {
+  padding: 16px;
+  background-color: var(--bg-card);
+  overflow-x: auto;
+}
+
+.code-text {
+  font-family: monospace;
+  font-size: 14px;
+  color: var(--text-code);
+  white-space: pre;
+}
+
+/* 热门组件部分 */
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.component-preview-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border: 1px solid var(--border-base);
+}
+
+.component-preview-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.component-preview {
+  height: 160px;
+  background-color: var(--bg-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.component-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.component-icon image {
+  width: 48px;
+  height: 48px;
+}
+
+.component-info {
+  padding: 16px;
+}
+
+.component-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.component-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.view-all-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.view-all-button {
+  padding: 12px 24px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-all-button:hover {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+/* 特性部分 */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.feature-card {
+  padding: 24px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon image {
+  width: 48px;
+  height: 48px;
+}
+
+.feature-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.feature-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 最近更新 */
+.timeline {
+  padding: 0 20px;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background-color: var(--primary-light);
+}
+
+.timeline-item {
+  padding-left: 32px;
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -8px;
+  top: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  border: 4px solid var(--bg-page);
+}
+
+.timeline-date {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.timeline-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.timeline-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 设计原则 */
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.principle-card {
+  padding: 32px 24px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-base);
+}
+
+.principle-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  display: block;
+  position: relative;
+}
+
+.principle-title::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--primary);
+  border-radius: 50%;
+}
+
+.principle-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 主题定制 */
+.theme-controls {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-base);
+}
+
+.theme-section {
+  margin-bottom: 24px;
+}
+
+.theme-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  display: block;
 }
 
 .theme-toggle {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+  cursor: pointer;
 }
 
-.toggle-icon {
-  width: 24px;
+.toggle-track {
+  width: 48px;
   height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: var(--bg-hover);
+  border-radius: 12px;
+  position: relative;
+  margin-right: 12px;
+  transition: background-color 0.3s ease;
 }
 
-.sun-icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
+.toggle-track.is-dark {
   background-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(255, 126, 106, 0.3);
 }
 
-.moon-icon {
-  width: 18px;
-  height: 18px;
+.toggle-thumb {
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background-color: transparent;
-  box-shadow: -3px 3px 0 var(--primary);
-  transform: rotate(-45deg);
+  background-color: white;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
 }
 
-/* 主题设置样式 */
-.theme-section {
-  margin-bottom: 30px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+.toggle-track.is-dark .toggle-thumb {
+  transform: translateX(24px);
 }
 
-.theme-section.animate-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.section-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
+.toggle-label {
+  font-size: 14px;
   color: var(--text-primary);
-  margin-bottom: 15px;
-}
-
-.theme-options {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.theme-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  border-radius: var(--radius-lg);
-  border: 2px solid transparent;
-  background-color: var(--bg-card);
-  width: 80px;
-}
-
-.theme-option.active {
-  border-color: var(--primary);
-}
-
-.theme-preview {
-  width: 60px;
-  height: 60px;
-  border-radius: var(--radius-md);
-  margin-bottom: 10px;
-}
-
-.light-preview {
-  background-color: #fcfcfc;
-  border: 1px solid var(--gray-200);
-  position: relative;
-}
-
-.light-preview::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 40px;
-  height: 10px;
-  background-color: #FF7E6A;
-  border-radius: 5px;
-}
-
-.dark-preview {
-  background-color: #181818;
-  position: relative;
-}
-
-.dark-preview::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 40px;
-  height: 10px;
-  background-color: #FF7E6A;
-  border-radius: 5px;
-}
-
-.system-preview {
-  background: linear-gradient(to right, #fcfcfc 0%, #fcfcfc 50%, #181818 50%, #181818 100%);
-  position: relative;
-}
-
-.system-preview::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 40px;
-  height: 10px;
-  background-color: #FF7E6A;
-  border-radius: 5px;
-}
-
-.theme-customizer {
-  background-color: var(--bg-card);
-  border-radius: var(--radius-lg);
-  padding: 15px;
-  box-shadow: var(--shadow-md);
-}
-
-.color-picker, .radius-picker {
-  margin-bottom: 15px;
-}
-
-.picker-label {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--text-primary);
-  font-weight: 500;
 }
 
 .color-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.color-option {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid transparent;
-}
-
-.color-option.active {
-  border-color: var(--text-primary);
-}
-
-.custom-color {
-  position: relative;
-  overflow: hidden;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
-                    linear-gradient(-45deg, #ccc 25%, transparent 25%),
-                    linear-gradient(45deg, transparent 75%, #ccc 75%),
-                    linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-
-.custom-color input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.radius-picker slider {
-  margin-top: 10px;
-}
-
-/* 内容区样式 */
-.content {
-  flex: 1;
-  padding: 24px 16px 48px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.content.animate-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.header {
-  margin-bottom: 32px;
-  animation: fadeIn 0.6s ease forwards;
-}
-
-.title {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-primary);
-  display: block;
-  margin-bottom: 12px;
-  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.subtitle {
-  font-size: 16px;
-  color: var(--text-secondary);
-  display: block;
-}
-
-/* 组件列表样式 */
-.component-list {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-.category {
-  animation: slideUp 0.5s ease forwards;
-  opacity: 0;
-}
-
-.category-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.category-name {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-primary);
-  padding-right: 12px;
-  white-space: nowrap;
-}
-
-.category-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(255, 126, 106, 0.3), rgba(255, 126, 106, 0.05));
-}
-
-.components {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.component-card {
-  background-color: var(--bg-card);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-base);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  animation: slideUp 0.5s ease forwards;
-  transition: all 0.3s ease;
-}
-
-.component-card--completed {
-  border-left: 3px solid var(--primary);
-}
-
-.component-card--planning {
-  border-left: 3px solid var(--gray-500);
-  opacity: 0.8;
-}
-
-.component-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
-.component-card:active {
-  background-color: var(--bg-hover);
-  transform: scale(0.98);
-}
-
-.component-main {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.component-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-right: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 126, 106, 0.1);
-  flex-shrink: 0;
-}
-
-.component-icon.planning {
-  background-color: rgba(255, 169, 145, 0.1);
-}
-
-.component-icon.completed {
-  background-color: rgba(255, 126, 106, 0.15);
-}
-
-.icon-image {
-  width: 28px;
-  height: 28px;
-  opacity: 0.8;
-}
-
-.component-content {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.component-info {
-  flex: 1;
-}
-
-.component-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  display: block;
-}
-
-.component-desc {
-  font-size: 14px;
-  color: var(--text-secondary);
-  display: block;
-}
-
-.component-status {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  color: #fff;
-  white-space: nowrap;
-}
-
-.component-status.planning {
-  background-color: var(--gray-500);
-}
-
-.component-status.completed {
-  background-color: var(--primary);
-}
-
-/* 组件预览样式 */
-.component-preview {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border-base);
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 预览 - 按钮 */
-.preview-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.preview-button {
-  padding: 6px 12px;
-  border-radius: var(--radius-md);
-  font-size: 12px;
-}
-
-.preview-button--primary {
-  background-color: var(--primary);
-  color: white;
-}
-
-.preview-button--default {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-base);
-  color: var(--text-primary);
-}
-
-/* 预览 - 卡片 */
-.preview-card {
-  width: 100%;
-  border: 1px solid var(--border-base);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.preview-card-header {
-  padding: 8px;
-  font-size: 12px;
-  background-color: var(--bg-hover);
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border-base);
-  font-weight: 500;
-}
-
-.preview-card-content {
-  padding: 8px;
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.preview-card-footer {
-  padding: 8px;
-  border-top: 1px solid var(--border-base);
-  display: flex;
-  justify-content: flex-end;
-}
-
-.preview-card-btn {
-  font-size: 11px;
-  padding: 4px 8px;
-  background-color: var(--primary);
-  color: white;
-  border-radius: var(--radius-sm);
-}
-
-/* 预览 - 表单 */
-.preview-form {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.preview-form-group {
-  display: flex;
-  gap: 16px;
-}
-
-.preview-radio {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1px solid var(--primary);
-  position: relative;
-}
-
-.preview-radio::after {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--primary);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.preview-checkbox {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  background-color: var(--primary);
-  position: relative;
-}
-
-.preview-checkbox::after {
-  content: '';
-  width: 8px;
-  height: 4px;
-  border-left: 2px solid white;
-  border-bottom: 2px solid white;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.preview-switch-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.preview-switch {
-  width: 36px;
-  height: 18px;
-  border-radius: 10px;
-  background-color: var(--primary);
-  position: relative;
-}
-
-.preview-switch::after {
-  content: '';
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: white;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-}
-
-/* 预览 - 颜色 */
-.preview-colors {
-  display: flex;
-  gap: 8px;
-}
-
-.preview-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-}
-
-/* 预览 - 图标 */
-.preview-icons {
-  display: flex;
   gap: 12px;
 }
 
-.preview-icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  background-color: var(--text-secondary);
+.color-option {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease;
 }
 
-/* 预览 - 导航栏 */
-.preview-navbar {
-  width: 100%;
-  height: 20px;
-  background-color: var(--bg-card);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.active::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid var(--text-primary);
+  border-radius: 50%;
+}
+
+.radius-slider {
   padding: 0 8px;
-  justify-content: space-between;
-  border: 1px solid var(--border-base);
-}
-
-.preview-navbar-left {
-  width: 12px;
-  height: 8px;
-  background-color: var(--text-secondary);
-}
-
-.preview-navbar-title {
-  width: 60px;
-  height: 6px;
-  background-color: var(--text-secondary);
-}
-
-.preview-navbar-right {
-  width: 12px;
-  height: 8px;
-  background-color: var(--text-secondary);
-}
-
-/* 预览 - 排版 */
-.preview-typography {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.preview-text-lg {
-  height: 10px;
-  background-color: var(--text-primary);
-  width: 80%;
-  border-radius: 2px;
-}
-
-.preview-text-md {
-  height: 8px;
-  background-color: var(--text-secondary);
-  width: 60%;
-  border-radius: 2px;
-}
-
-.preview-text-sm {
-  height: 6px;
-  background-color: var(--text-hint);
-  width: 40%;
-  border-radius: 2px;
-}
-
-/* 预览 - 主题 */
-.preview-theme {
-  display: flex;
-  gap: 8px;
-}
-
-.preview-theme-light {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: var(--white);
-  border: 1px solid var(--border-base);
-}
-
-.preview-theme-dark {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #333;
-}
-
-/* 页脚 */
-.footer {
-  background-color: var(--bg-card);
-  padding: 24px 16px;
-  border-top: 1px solid var(--divider);
-  margin-top: auto;
-}
-
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-.footer-logo {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--primary);
-}
-
-.footer-links {
-  display: flex;
-  gap: 16px;
-}
-
-.footer-link {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.footer-copyright {
-  font-size: 12px;
-  color: var(--text-hint);
-}
-
-/* 动画效果 */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* 响应式调整 */
-@media (min-width: 768px) {
-  .page-header,
-  .content,
-  .footer-content {
-    padding: 40px 32px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .footer {
-    padding: 0;
-  }
-}
-
-@media (min-width: 992px) {
-  .components {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .component-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .theme-section {
-    margin-bottom: 40px;
-  }
-
-  .theme-customizer {
-    display: flex;
-    gap: 30px;
-    align-items: center;
-  }
-
-  .color-picker {
-    flex: 1;
-    margin-bottom: 0;
-  }
-
-  .radius-picker {
-    flex: 1;
-    margin-bottom: 0;
-  }
-
-  .header {
-    text-align: center;
-    margin-bottom: 48px;
-  }
-
-  .title {
+@media (max-width: 768px) {
+  .hero-title {
     font-size: 36px;
   }
 
-  .subtitle {
+  .hero-subtitle {
     font-size: 18px;
-    margin-top: 12px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .page-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
-  .navbar {
-    width: 100%;
-    max-width: 1200px;
+  .section {
+    padding: 48px 16px;
   }
 
-  .theme-options {
-    gap: 24px;
+  .section-title {
+    font-size: 28px;
   }
 
-  .theme-option {
-    width: 100px;
-    padding: 15px;
-  }
-
-  .theme-preview {
-    width: 70px;
-    height: 70px;
-  }
-
-  .component-list {
-    gap: 48px;
-  }
-
-  .category-name {
-    font-size: 22px;
-  }
-
-  .component-preview {
-    min-height: 80px;
-  }
-}
-
-@media (max-width: 600px) {
-  .components {
+  .components-grid,
+  .features-grid,
+  .principles-grid {
     grid-template-columns: 1fr;
   }
 
-  .component-card {
-    padding: 12px;
-  }
-
-  .component-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 12px;
-  }
-
-  .icon-image {
-    width: 24px;
-    height: 24px;
-  }
-
-  .theme-options {
-    justify-content: space-between;
-  }
-
-  .theme-option {
-    width: 30%;
-    padding: 5px;
-  }
-
-  .footer-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+  .theme-controls {
+    padding: 24px 16px;
   }
 }
 </style>
