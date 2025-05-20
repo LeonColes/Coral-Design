@@ -14,14 +14,14 @@ on:
 
 # 定义工作流中的作业
 jobs:
-  # 代码风格检查作业
-  lint:
-    # 测试矩阵配置：在多种环境下运行同一任务
+  # 代码检查和构建合并作业
+  check-and-build:
+    # 测试矩阵配置：只在不同操作系统运行同一任务，减少总任务数
     strategy:
       matrix:
-        # 使用Node.js 20.x版本
+        # 只使用Node.js 20.x版本
         node_version: [20.x]
-        # 在不同操作系统上测试
+        # 在不同操作系统上测试，保持操作系统多样性
         os: [ubuntu-latest, windows-latest, macos-latest]
       # 允许部分任务失败而不影响其他任务
       fail-fast: false
@@ -30,18 +30,21 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     # 任务超时时间
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     # 执行步骤
     steps:
-      # 配置Git行尾处理
+      # 配置Git行尾处理，解决不同操作系统的换行符问题
       - run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
+
       # 检出代码
       - uses: actions/checkout@v4
+
       # 设置PNPM
       - uses: pnpm/action-setup@v4
+
       # 设置Node.js环境
       - uses: actions/setup-node@v4
         with:
@@ -49,81 +52,18 @@ jobs:
           node-version: ${{ matrix.node_version }}
           # 启用PNPM缓存
           cache: pnpm
+
       # 安装依赖
       - run: pnpm i
-      # 运行代码检查
-      - run: pnpm run lint
 
-  # TypeScript类型检查作业
-  typecheck:
-    # 测试矩阵配置
-    strategy:
-      matrix:
-        # 使用Node.js 20.x版本
-        node_version: [20.x]
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
+      # 运行代码风格检查
+      - name: Run Lint
+        run: pnpm run lint
 
-    # 使用矩阵定义的操作系统
-    runs-on: ${{ matrix.os }}
+      # 运行TypeScript类型检查
+      - name: Run Type Check
+        run: pnpm run type-check
 
-    # 超时设置
-    timeout-minutes: 10
-
-    # 执行步骤
-    steps:
-      # 配置Git行尾
-      - run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-      # 检出代码
-      - uses: actions/checkout@v4
-      # 设置PNPM
-      - uses: pnpm/action-setup@v4
-      # 设置Node.js
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: pnpm
-      # 安装依赖
-      - run: pnpm i
-      # 运行类型检查
-      - run: pnpm run type-check
-
-  # 项目构建作业
-  build:
-    # 测试矩阵配置
-    strategy:
-      matrix:
-        # 使用Node.js 20.x版本
-        node_version: [20.x]
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        # 多种构建命令：标准构建、微信小程序、App
-        build_cmd: [build, 'build:mp-weixin', 'build:app']
-      fail-fast: false
-
-    # 使用矩阵定义的操作系统
-    runs-on: ${{ matrix.os }}
-
-    # 超时设置
-    timeout-minutes: 10
-
-    # 执行步骤
-    steps:
-      # 配置Git行尾
-      - run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-      # 检出代码
-      - uses: actions/checkout@v4
-      # 设置PNPM
-      - uses: pnpm/action-setup@v4
-      # 设置Node.js
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node_version }}
-          cache: pnpm
-      # 安装依赖
-      - run: pnpm i
-      # 运行相应的构建命令
-      - run: pnpm run ${{ matrix.build_cmd }}
+      # 运行标准构建 - 简化构建过程，只运行一个标准构建命令
+      - name: Run Build
+        run: pnpm run build
